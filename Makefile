@@ -3,7 +3,9 @@
 # Comandos de desarrollo para el piloto
 # ============================================================
 
-.PHONY: help up down backend frontend db migrate seed lint format test clean
+.PHONY: help up down logs backend backend-shell frontend frontend-build frontend-preview \
+	db db-create migrate migrate-new migrate-down seed lint format format-check typecheck \
+	test test-cov pacha-sim pacha-validate deploy-frontend deploy-check clean install env setup
 
 # --- Ayuda ---
 help: ## Mostrar esta ayuda
@@ -66,11 +68,11 @@ lint: ## Correr linters (backend + frontend)
 	cd frontend && npm run lint
 
 format: ## Formatear código (backend + frontend)
-	cd backend && black . && isort .
+	cd backend && ruff check --select I --fix . && ruff format .
 	cd frontend && npx prettier --write "src/**/*.{ts,tsx,css}"
 
 format-check: ## Verificar formato sin cambiar archivos
-	cd backend && black --check . && isort --check .
+	cd backend && ruff check --select I . && ruff format --check .
 	cd frontend && npx prettier --check "src/**/*.{ts,tsx,css}"
 
 typecheck: ## Verificar tipos de TypeScript
@@ -107,13 +109,12 @@ clean: ## Limpiar archivos generados
 	@echo "🧹 Limpio"
 
 install: ## Instalar dependencias (backend + frontend)
-	cd backend && pip install -r requirements.txt
+	cd backend && pip install -e ".[dev]"
 	cd frontend && npm install
 	@echo "📦 Dependencias instaladas"
 
 env: ## Crear .env desde .env.example si no existe
-	@test -f .env || cp .env.example .env && echo "📄 .env creado desde .env.example"
-	@test -f .env && echo "📄 .env ya existe"
+	@if [ -f .env ]; then echo "📄 .env ya existe"; else cp .env.example .env && echo "📄 .env creado desde .env.example"; fi
 
 setup: env install db-create migrate seed ## Setup completo para nuevo dev
 	@echo ""

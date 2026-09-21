@@ -44,7 +44,7 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://riqchariy:password@db:5432/riqchariy_db
+      DATABASE_URL: postgresql+psycopg://riqchariy:password@db:5432/riqchariy_db
       REDIS_URL: redis://redis:6379/0
     depends_on:
       db:

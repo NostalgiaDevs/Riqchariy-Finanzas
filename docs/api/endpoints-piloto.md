@@ -114,7 +114,7 @@ Avanzar un día (tick). El backend ejecuta el pipeline completo.
     "missions_progress": {
       "MSN-001": { "current": 15, "target": 20, "complete": false }
     },
-    "score_change": +3,
+    "score_change": 3,
     "stress_change": -0.01
   },
   "new_state": { "...PlayerEconomy completo..." }
@@ -141,7 +141,7 @@ Tomar una decisión en un evento.
   "effects": {
     "wallet_change": -40,
     "stress_change": -0.03,
-    "score_change": +5,
+    "score_change": 5,
     "flags_added": [],
     "teaches": ["fondo_de_emergencia", "prevencion"]
   },
@@ -388,7 +388,9 @@ Reclamar recompensa de misión completada.
 ## Health
 
 ### `GET /health`
-Estado del servicio.
+Estado del servicio. Sin autenticación (fuera del prefijo `/api/v1`).
+
+> Estado actual: solo devuelve `status` y `version`. Los campos `db`, `redis` y `uptime_seconds` se agregan cuando existan esas conexiones.
 
 **Response 200:**
 ```json
