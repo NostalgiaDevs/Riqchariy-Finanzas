@@ -1,5 +1,70 @@
+# --- ARCHIVOS DE CONFIGURACIÓN PERSONAL / SECRETOS ---
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+*.key
 
-# Python (backend)
+# --- ENTORNOS VIRTUALES Y DEPENDENCIAS GENERALES ---
+node_modules/
+bower_components/
+venv/
 .venv/
+env/
+ENV/
+bin/
+lib/
+develop-eggs/
+eggs/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
 *.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+# --- PYTHON CACHE ---
 __pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
+# --- EDITORES DE CÓDIGO (IDE) ---
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+
+# --- SISTEMA OPERATIVO ---
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.Trashes
+
+# --- ARCHIVOS DE REGISTRO Y TEMPORALES (LOGS) ---
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-debug.log*
