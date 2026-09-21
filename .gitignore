@@ -27,6 +27,14 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+# --- PYTHON CACHE ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
 
 # --- EDITORES DE CÓDIGO (IDE) ---
 .vscode/
