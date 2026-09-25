@@ -9,7 +9,7 @@ dependencies = [
     "uvicorn[standard]>=0.30",
     "httpx>=0.27",
     # Config y validación
-    "pydantic>=2.8",
+    "pydantic[email]>=2.8",
     "pydantic-settings>=2.7",  # NoDecode requiere >=2.7
     "pyyaml>=6.0",             # content/balance.yaml, items, jobs
     # Base de datos
