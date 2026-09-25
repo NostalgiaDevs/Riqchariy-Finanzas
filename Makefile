@@ -21,7 +21,7 @@ up: ## Levantar todo (backend + db + redis)
 	@echo "   Redis:    localhost:6379"
 
 down: ## Bajar todos los servicios
-	docker compose down
+	docker compose down -v
 
 logs: ## Ver logs de todos los servicios
 	docker compose logs -f
@@ -51,16 +51,16 @@ db-create: ## Crear la base de datos
 	docker compose exec db createdb -U riqchariy riqchariy_db 2>/dev/null || true
 
 migrate: ## Correr migraciones de Alembic
-	cd backend && alembic upgrade head
+	docker compose exec backend alembic upgrade head
 
 migrate-new: ## Crear nueva migración (NAME=nombre)
-	cd backend && alembic revision --autogenerate -m "$(NAME)"
+	docker compose exec backend alembic revision --autogenerate -m "$(NAME)"
 
 migrate-down: ## Revertir última migración
-	cd backend && alembic downgrade -1
+	docker compose exec backend alembic downgrade -1
 
 seed: ## Cargar datos iniciales (balance, events, items, jobs)
-	cd backend && python -m scripts.seed_content
+	docker compose exec backend python -m scripts.seed_content
 
 # --- Calidad de código ---
 lint: ## Correr linters (backend + frontend)

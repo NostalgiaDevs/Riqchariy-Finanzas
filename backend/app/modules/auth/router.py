@@ -22,7 +22,7 @@ async def register(user_create: schemas.UserCreate, db: AsyncSession = Depends(g
     # Crea un nuevo usuario
     new_user = models.User(
         email=user_create.email,
-        hashed_password=security.hash_password(user_create.password),
+        password_hash=security.hash_password(user_create.password),
         name=user_create.name,
         classroom_code=user_create.classroom_code
     )
@@ -40,7 +40,7 @@ async def login(user_login: schemas.UserLogin, db: AsyncSession = Depends(get_db
     # Verifica si el usuario existe
     result = await db.execute(select(models.User).where(models.User.email == user_login.email))
     user = result.scalars().first()
-    if not user or not security.verify_password(user_login.password, user.hashed_password):
+    if not user or not security.verify_password(user_login.password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Correo electrónico o contraseña incorrectos.",
