@@ -1,0 +1,82 @@
+/*
+ * Tokens de diseño de Riqchariy (Tailwind v4: cada variable de @theme genera utilidades).
+ *   --color-fucsia      → bg-fucsia, text-fucsia, border-fucsia…
+ *   --radius-card       → rounded-card
+ *   --shadow-card       → shadow-card
+ *   --spacing-touch     → min-h-touch, size-touch… (44px, target táctil mínimo)
+ *
+ * Paleta base del README. Las variantes -700 son para TEXTO sobre crema/blanco:
+ * los colores base de ahorro, deuda y turquesa no llegan al contraste AA (4.5:1) en texto pequeño.
+ */
+
+@theme {
+  /* ── Superficies y tinta ── */
+  --color-crema: #faf6ef;
+  --color-crema-200: #efe7da;
+  --color-crema-300: #e2d7c6;
+  --color-superficie: #ffffff;
+  --color-tinta: #141b2e; /* "oscuro" del README */
+  --color-tinta-suave: #4a5068;
+
+  /* ── Marca ── */
+  --color-fucsia: #d62e6c; /* primario: blanco encima = 4.7:1 */
+  --color-fucsia-700: #b0215a;
+  --color-fucsia-50: #fbe7ef;
+
+  /* ── Dinero ── */
+  --color-dorado: #f2a81d; /* inti; usar texto tinta encima */
+  --color-dorado-700: #8a5a00;
+  --color-dorado-50: #fdf3dc;
+
+  /* ── Ahorro ── */
+  --color-ahorro: #2e9e6b;
+  --color-ahorro-700: #1f7a51;
+  --color-ahorro-50: #e3f4eb;
+
+  /* ── Deuda (siempre acompañada de ícono ⚠ y texto) ── */
+  --color-deuda: #c4472f; /* blanco encima = 4.9:1 */
+  --color-deuda-700: #a93a25;
+  --color-deuda-50: #f9e6e1;
+
+  /* ── Acentos ── */
+  --color-turquesa: #2aa8a0;
+  --color-turquesa-700: #1b7a74;
+  --color-turquesa-50: #e0f4f2;
+  --color-morado: #7b3fa0;
+  --color-morado-50: #f1e8f7;
+
+  /* ── Tipografía ──
+   * 'Noto Sans Tifinagh' va en ambas pilas solo por el símbolo ⵊ (U+2D4A): no todos los celulares
+   * traen una fuente Tifinagh. Por unicode-range, se descarga (~18 KB) solo si aparece el símbolo. */
+  --font-display: 'Fredoka', 'Noto Sans Tifinagh', ui-rounded, 'Segoe UI', system-ui, sans-serif;
+  --font-sans:
+    'Inter Variable', 'Inter', 'Noto Sans Tifinagh', system-ui, -apple-system, 'Segoe UI',
+    sans-serif;
+
+  /* ── Radios ── */
+  --radius-control: 0.875rem;
+  --radius-card: 1.25rem;
+  --radius-sheet: 1.75rem;
+
+  /* ── Sombras ── */
+  --shadow-card: 0 1px 2px rgb(20 27 46 / 0.06), 0 4px 16px rgb(20 27 46 / 0.06);
+  --shadow-raised: 0 2px 4px rgb(20 27 46 / 0.08), 0 12px 32px rgb(20 27 46 / 0.12);
+  --shadow-nav: 0 -4px 20px rgb(20 27 46 / 0.08);
+
+  /* ── Espaciado semántico ── */
+  --spacing-touch: 2.75rem; /* 44px: target táctil mínimo */
+  --spacing-gutter: 1rem; /* margen lateral en mobile */
+  --spacing-nav: 4.5rem; /* alto del bottom nav */
+
+  /* ── Animaciones ── */
+  --animate-shimmer: shimmer 1.4s ease-in-out infinite;
+
+  @keyframes shimmer {
+    0% {
+      background-position: 100% 0;
+    }
+    100% {
+      background-position: -100% 0;
+    }
+  }
+}
