@@ -1,0 +1,108 @@
+# Constantes económicas del piloto v0.1 (moneda: intis ⵊ)
+version: 1
+
+initial_state:
+  wallet: 0
+  savings_goal: 0
+  savings_emergency: 0
+  savings_free: 0
+  current_tick: 0
+  credit_score: 500
+  stress: 0.0
+  score: 550
+  league: chaski
+
+ticks:
+  per_month: 28
+  per_week: 7
+
+leagues:
+  - id: chaski
+    name: Chaski
+    icon: "🏃"
+    min_score: 0
+  - id: qollqa
+    name: Qollqa
+    icon: "🏛️"
+    min_score: 650
+  - id: amauta
+    name: Amauta
+    icon: "📜"
+    min_score: 780
+  - id: apu
+    name: Apu
+    icon: "🏔️"
+    min_score: 900
+
+score:
+  min: 0
+  max: 1000
+  weights:
+    savings: 0.30
+    debt: 0.25
+    goals: 0.20
+    stress: 0.15
+    decisions: 0.10
+
+credit_score:
+  min: 300
+  max: 850
+  on_time_payment: 10
+  late_payment: -25
+  default: -60
+
+stress:
+  min: 0.0
+  max: 1.0
+  daily_decay: 0.01
+  broke_penalty: 0.05
+
+jobs:
+  - id: ayudante
+    name: Ayudante de tienda
+    wage_per_period: 60
+    period_ticks: 7
+  - id: kiosquero
+    name: Kiosquero titular
+    wage_per_period: 90
+    period_ticks: 7
+  - id: repartidor
+    name: Repartidor
+    wage_per_period: 75
+    period_ticks: 7
+
+fixed_expenses:
+  - id: comida
+    amount: 15
+    every_ticks: 7
+  - id: celular
+    amount: 10
+    every_ticks: 7
+  - id: pasajes
+    amount: 8
+    every_ticks: 7
+
+savings:
+  jars: [meta, emergencias, libre]
+  daily_interest_rate: 0.004
+  withdraw_friction:
+    meta: 0.05
+    emergencias: 0.0
+    libre: 0.0
+
+credit:
+  banco:
+    monthly_rate: 0.05
+    max_principal: 200
+    installments: 4
+  cuotas_tienda:
+    monthly_rate: 0.08
+    max_principal: 300
+    installments: 6
+  prestamista:
+    monthly_rate: 0.30
+    max_principal: 150
+    installments: 2
+
+events:
+  daily_probability: 0.25

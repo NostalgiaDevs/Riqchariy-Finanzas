@@ -4,7 +4,7 @@
 # ============================================================
 
 .PHONY: help up down logs backend backend-shell frontend frontend-build frontend-preview \
-	db db-create migrate migrate-new migrate-down seed lint format format-check typecheck \
+	db db-create migrate migrate-new migrate-down seed reset lint format format-check typecheck \
 	test test-cov pacha-sim pacha-validate deploy-frontend deploy-check clean install env setup
 
 # --- Ayuda ---
@@ -59,8 +59,11 @@ migrate-new: ## Crear nueva migración (NAME=nombre)
 migrate-down: ## Revertir última migración
 	docker compose exec backend alembic downgrade -1
 
-seed: ## Cargar datos iniciales (balance, events, items, jobs)
+seed: ## Cargar aula demo + 10 alumnos y validar contenido (idempotente)
 	docker compose exec backend python -m scripts.seed_content
+
+reset: ## Borrar BD, re-migrar y correr seed (solo desarrollo)
+	docker compose exec backend python -m scripts.reset_db
 
 # --- Calidad de código ---
 lint: ## Correr linters (backend + frontend)
