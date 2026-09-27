@@ -12,8 +12,10 @@ dependencies = [
     "pydantic[email]>=2.8",
     "pydantic-settings>=2.7",  # NoDecode requiere >=2.7
     "pyyaml>=6.0",             # content/balance.yaml, items, jobs
+    "passlib[bcrypt]",         # para hasher contraseñas
+    "asyncpg",                 # driver asíncrono de PostgreSQL
     # Base de datos
-    "sqlalchemy>=2.0",
+    "sqlalchemy[asyncio]>=2.0",
     "alembic>=1.13",
     "psycopg[binary]>=3.2",    # driver de PostgreSQL (URL: postgresql+psycopg://)
     "pgvector>=0.3",           # embeddings para RAG de Qori
@@ -55,6 +57,9 @@ select = [
     "UP",  # pyupgrade
     "SIM", # flake8-simplify
 ]
+
+[tool.ruff.lint.isort]
+known-third-party = ["alembic"]
 
 [tool.ruff.format]
 quote-style = "double"

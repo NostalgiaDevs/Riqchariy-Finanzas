@@ -42,6 +42,9 @@ class Settings(BaseSettings):
     pacha_default_seed: int = 42
     pacha_ticks_per_month: int = 28
 
+    # --- Contenido (balance.yaml, events/*.json). Vacío = autodetectar ---
+    content_dir: str = ""
+
     # --- Rate limiting (formato slowapi: "10/minute") ---
     rate_limit_chatbot: str = "10/minute"
     rate_limit_api: str = "100/minute"

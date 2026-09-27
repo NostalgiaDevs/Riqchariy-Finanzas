@@ -15,7 +15,7 @@
 - Estrés (0–1) como termómetro emocional
 - Score financiero (0–1000) con 5 componentes
 - 4 ligas (Chaski → Qollqa → Amauta → Apu)
-- 15 eventos (6 emergencias, 3 tentaciones, 5 oportunidades, 3 macro, 3 social)
+- 15 eventos (3 emergencias, 3 tentaciones, 3 oportunidades, 3 macro, 3 social)
 - Preview de decisiones (mostrar impacto antes de elegir)
 - Tienda con 12 items y rotación semanal
 - Sistema de misiones semanales (3 activas)

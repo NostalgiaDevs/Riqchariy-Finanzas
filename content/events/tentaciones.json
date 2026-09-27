@@ -1,0 +1,68 @@
+[
+  {
+    "id": "TMP-001",
+    "category": "tentacion",
+    "title": "Zapatillas de moda",
+    "description": "Salieron las zapatillas que todos quieren. Cuestan ⵊ120.",
+    "choices": [
+      {
+        "id": "contado",
+        "label": "Comprarlas al contado",
+        "outcome": "Las estrenas feliz, pero te quedas casi sin colchón.",
+        "effects": { "wallet_change": -120, "stress_change": 0.08, "score_change": -5, "teaches": ["necesidad_vs_deseo"] }
+      },
+      {
+        "id": "cuotas",
+        "label": "Comprarlas en 6 cuotas",
+        "outcome": "Pagas mucho más de lo que costaban.",
+        "effects": { "stress_change": 0.05, "score_change": -10, "flags_added": ["deuda_cuotas"], "teaches": ["costo_del_credito"] }
+      },
+      {
+        "id": "esperar",
+        "label": "Esperar y ahorrar para ellas",
+        "outcome": "Decides planificar la compra. Buena decisión.",
+        "effects": { "score_change": 10, "flags_added": ["decision_informada"], "teaches": ["gratificacion_diferida"] }
+      }
+    ]
+  },
+  {
+    "id": "TMP-002",
+    "category": "tentacion",
+    "title": "Oferta en el videojuego",
+    "description": "Tu juego favorito ofrece un pase de temporada por ⵊ50 solo por hoy.",
+    "choices": [
+      {
+        "id": "comprar",
+        "label": "Comprar el pase",
+        "outcome": "Te diviertes, pero el pase vence en un mes.",
+        "effects": { "wallet_change": -50, "score_change": -5, "teaches": ["urgencia_artificial"] }
+      },
+      {
+        "id": "pasar",
+        "label": "Dejar pasar la oferta",
+        "outcome": "Las ofertas \"solo por hoy\" siempre vuelven.",
+        "effects": { "score_change": 8, "teaches": ["urgencia_artificial"] }
+      }
+    ]
+  },
+  {
+    "id": "TMP-003",
+    "category": "tentacion",
+    "title": "Comida rápida todos los días",
+    "description": "Tus amigos van por hamburguesas después del trabajo cada día.",
+    "choices": [
+      {
+        "id": "siempre",
+        "label": "Ir con ellos siempre (ⵊ12 diarios)",
+        "outcome": "Esos gastos pequeños suman mucho al mes.",
+        "effects": { "wallet_change": -36, "score_change": -5, "teaches": ["gasto_hormiga"] }
+      },
+      {
+        "id": "a_veces",
+        "label": "Ir solo el viernes",
+        "outcome": "Disfrutas con tus amigos sin descuidar tu presupuesto.",
+        "effects": { "wallet_change": -12, "stress_change": -0.02, "score_change": 5, "teaches": ["presupuesto"] }
+      }
+    ]
+  }
+]

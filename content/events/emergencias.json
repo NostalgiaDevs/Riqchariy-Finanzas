@@ -1,0 +1,68 @@
+[
+  {
+    "id": "EMR-001",
+    "category": "emergencia",
+    "title": "Te enfermas",
+    "description": "Amaneces con fiebre y dolor de garganta. Necesitas medicinas.",
+    "choices": [
+      {
+        "id": "farmacia",
+        "label": "Ir a la farmacia (ⵊ40)",
+        "outcome": "Te recuperas rápido. Dinero bien gastado en tu salud.",
+        "effects": { "wallet_change": -40, "stress_change": -0.03, "score_change": 5, "teaches": ["fondo_de_emergencia", "prevencion"] }
+      },
+      {
+        "id": "aguantar",
+        "label": "Aguantar sin medicinas",
+        "outcome": "Te sientes peor varios días y rindes menos en el trabajo.",
+        "effects": { "stress_change": 0.1, "score_change": -5, "teaches": ["costo_oculto"] }
+      }
+    ]
+  },
+  {
+    "id": "EMR-002",
+    "category": "emergencia",
+    "title": "Se rompe tu celular",
+    "description": "Tu celular se cae y la pantalla queda inservible.",
+    "choices": [
+      {
+        "id": "reparar",
+        "label": "Repararlo (ⵊ60)",
+        "outcome": "Queda como nuevo. Arreglar suele ser más barato que reemplazar.",
+        "effects": { "wallet_change": -60, "score_change": 5, "teaches": ["reparar_vs_comprar"] }
+      },
+      {
+        "id": "comprar_nuevo",
+        "label": "Comprar uno nuevo en cuotas (ⵊ200)",
+        "outcome": "Tienes celular nuevo, pero ahora debes varias cuotas.",
+        "effects": { "stress_change": 0.05, "score_change": -5, "flags_added": ["deuda_cuotas"], "teaches": ["costo_del_credito"] }
+      },
+      {
+        "id": "sin_celular",
+        "label": "Quedarte sin celular un tiempo",
+        "outcome": "Ahorras, pero te cuesta coordinar con tu trabajo.",
+        "effects": { "stress_change": 0.08, "teaches": ["necesidad_vs_deseo"] }
+      }
+    ]
+  },
+  {
+    "id": "EMR-003",
+    "category": "emergencia",
+    "title": "Pierdes tu billetera",
+    "description": "Al bajar del micro notas que ya no tienes tu billetera.",
+    "choices": [
+      {
+        "id": "denunciar",
+        "label": "Reportarlo y bloquear tus tarjetas",
+        "outcome": "Pierdes el efectivo, pero evitas que usen tus cuentas.",
+        "effects": { "wallet_change": -25, "stress_change": 0.03, "score_change": 5, "teaches": ["seguridad_financiera"] }
+      },
+      {
+        "id": "ignorar",
+        "label": "No hacer nada",
+        "outcome": "Alguien intentó usar tus datos. Te llevaste un buen susto.",
+        "effects": { "wallet_change": -25, "stress_change": 0.12, "score_change": -10, "teaches": ["seguridad_financiera"] }
+      }
+    ]
+  }
+]

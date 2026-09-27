@@ -10,6 +10,7 @@ from sqlalchemy import pool
 from alembic import context
 from app.infrastructure.database.base import Base
 from app.modules.auth.models import User
+from app.modules.classroom.models import Classroom
 from app.modules.pacha.domain.state import PlayerEconomy, EconomyEvent
 
 # this is the Alembic Config object, which provides
