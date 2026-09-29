@@ -41,6 +41,21 @@ describe('WalletBar', () => {
     )
   })
 
+  it('la versión nocturna (cabecera de la app) mantiene la misma semántica', () => {
+    const { container } = render(
+      <WalletBar tone="night" vitals={{ wallet: 135, savings: 220, debt: 65, stress: 0.7 }} />,
+    )
+    const bar = screen.getByRole('region', { name: 'Tu estado financiero' })
+    expect(within(bar).getByText('135 intis')).toBeInTheDocument()
+    expect(container.querySelector('[data-vital="debt"] dt svg')).not.toBeNull()
+    expect(screen.getByRole('meter', { name: 'Estrés' })).toHaveAttribute(
+      'aria-valuetext',
+      '70%, alto',
+    )
+    // Con estrés alto el nivel se escribe, no solo se colorea.
+    expect(within(bar).getByText('Alto')).toBeInTheDocument()
+  })
+
   it('mientras carga muestra el esqueleto', () => {
     render(<WalletBar vitals={null} />)
     expect(screen.getByLabelText('Cargando tu estado financiero')).toHaveAttribute(

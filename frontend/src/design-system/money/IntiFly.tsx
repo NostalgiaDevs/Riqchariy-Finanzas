@@ -1,6 +1,6 @@
 import { useCallback, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
-import { motion, useReducedMotion } from 'framer-motion'
+import { m, useReducedMotion } from 'framer-motion'
 import { formatIntis, INTI_SYMBOL } from '@/core/utils/format'
 import { IntiFlyContext, type FlyOptions, type FlyTarget } from './useIntiFly'
 
@@ -80,7 +80,7 @@ function FlightView({ flight, onLand }: { flight: Flight; onLand: () => void }) 
   return (
     <>
       {Array.from({ length: coins }, (_, i) => (
-        <motion.div
+        <m.div
           key={i}
           className="absolute left-0 top-0 grid place-items-center rounded-full border-2 border-dorado-700/40 bg-dorado font-display text-sm font-bold text-tinta shadow-raised"
           style={{ width: COIN_SIZE, height: COIN_SIZE }}
@@ -95,17 +95,17 @@ function FlightView({ flight, onLand }: { flight: Flight; onLand: () => void }) 
           onAnimationComplete={i === coins - 1 ? onLand : undefined}
         >
           {INTI_SYMBOL}
-        </motion.div>
+        </m.div>
       ))}
       {amount !== undefined ? (
-        <motion.div
+        <m.div
           className="absolute left-0 top-0 rounded-full bg-tinta px-2 py-0.5 text-sm font-semibold tabular-nums text-white"
           initial={{ x: from.x, y: from.y - 36, opacity: 0 }}
           animate={{ y: from.y - 64, opacity: [0, 1, 1, 0] }}
           transition={{ duration: 1.1, ease: 'easeOut' }}
         >
           {formatIntis(amount, { signed: true })}
-        </motion.div>
+        </m.div>
       ) : null}
     </>
   )

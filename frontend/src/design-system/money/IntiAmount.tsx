@@ -1,7 +1,10 @@
 import { useLayoutEffect, useRef } from 'react'
-import { animate, useReducedMotion } from 'framer-motion'
+import { useReducedMotion } from 'framer-motion'
 import { cn } from '@/core/utils/cn'
 import { formatIntis, intisLabel } from '@/core/utils/format'
+
+/** Duración del conteo cuando cambia el monto. */
+const COUNT_MS = 600
 
 export type IntiTone = 'auto' | 'neutral' | 'dorado' | 'ahorro' | 'deuda'
 
@@ -58,23 +61,24 @@ export function IntiAmount({
       return
     }
 
+    // Conteo con requestAnimationFrame y "rebote" con la Web Animations API: no hace falta cargar
+    // el motor de framer-motion para esto (se descarga aparte, solo para IntiFly).
     element.textContent = format(from)
-    const count = animate(from, value, {
-      duration: 0.6,
-      ease: 'easeOut',
-      onUpdate: (current) => {
-        shown.current = current
-        element.textContent = format(current)
-      },
+    const start = performance.now()
+    let frame = requestAnimationFrame(function tick(now) {
+      const progress = Math.min(1, (now - start) / COUNT_MS)
+      const current = from + (value - from) * (1 - (1 - progress) ** 3) // ease-out
+      shown.current = current
+      element.textContent = format(current)
+      if (progress < 1) frame = requestAnimationFrame(tick)
     })
-    const bump = animate(
-      element,
-      { scale: [1.12, 1] },
-      { type: 'spring', stiffness: 400, damping: 18 },
-    )
+    const bump = element.animate?.([{ transform: 'scale(1.12)' }, { transform: 'scale(1)' }], {
+      duration: 350,
+      easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)', // pequeño rebote, como el spring anterior
+    })
     return () => {
-      count.stop()
-      bump.stop()
+      cancelAnimationFrame(frame)
+      bump?.cancel()
     }
   }, [value, decimals, signed, animated, reducedMotion])
 

@@ -40,3 +40,10 @@ export function hasValidSession(state: Pick<AuthState, 'token' | 'expiresAt'>, n
   if (!state.token) return false
   return state.expiresAt === null || state.expiresAt > now
 }
+
+/** Hook: true si el alumno tiene sesión válida (para la portada y el login). */
+export function useHasSession() {
+  const token = useAuthStore((state) => state.token)
+  const expiresAt = useAuthStore((state) => state.expiresAt)
+  return hasValidSession({ token, expiresAt })
+}

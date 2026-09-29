@@ -2,11 +2,14 @@ import { useState, type FormEvent } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router'
 import { useMutation } from '@tanstack/react-query'
 import { authApi } from '@/core/api/endpoints'
+import { paths } from '@/app/paths'
+import { useDocumentTitle } from '@/core/hooks/useDocumentTitle'
 import { useAuthStore } from '@/core/store/authStore'
 import { USE_MOCKS } from '@/core/utils/env'
 import { RButton } from '@/design-system/RButton'
 import { RInput } from '@/design-system/RInput'
 import { AuthLayout } from './AuthLayout'
+import { focusFirstInvalid } from './focusFirstInvalid'
 import { FormError } from './FormError'
 import { PasswordInput } from './PasswordInput'
 
@@ -18,7 +21,9 @@ export function LoginPage() {
   const [password, setPassword] = useState('')
   const [fieldErrors, setFieldErrors] = useState<{ alias?: string; password?: string }>({})
 
-  const from = (location.state as { from?: string } | null)?.from ?? '/'
+  useDocumentTitle('Entrar')
+
+  const from = (location.state as { from?: string } | null)?.from ?? paths.app
 
   const login = useMutation({
     mutationFn: authApi.login,
@@ -40,7 +45,10 @@ export function LoginPage() {
       password: password ? undefined : 'Escribe tu contraseña.',
     }
     setFieldErrors(errors)
-    if (errors.alias || errors.password) return
+    if (errors.alias || errors.password) {
+      focusFirstInvalid(event.currentTarget, errors)
+      return
+    }
     login.mutate({ alias: cleanAlias, password })
   }
 
@@ -48,11 +56,15 @@ export function LoginPage() {
     <AuthLayout
       title="¡Hola de nuevo!"
       subtitle="Entra para seguir con tu vida financiera."
+      aside={{
+        title: 'Tu vida en Pacha te está esperando.',
+        text: 'Tu billetera, tus frascos de ahorro y tu liga siguen donde los dejaste.',
+      }}
       footer={
         <>
           ¿Primera vez?{' '}
           <Link
-            to="/register"
+            to={paths.register}
             className="font-semibold text-fucsia-700 underline-offset-2 hover:underline"
           >
             Crea tu cuenta con el código de tu aula

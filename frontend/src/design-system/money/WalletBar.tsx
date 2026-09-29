@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import { motion } from 'framer-motion'
 import { Flame, PiggyBank, TriangleAlert, Wallet } from 'lucide-react'
 import { cn } from '@/core/utils/cn'
 import { formatPercent } from '@/core/utils/format'
@@ -10,34 +9,82 @@ import { IntiAmount } from './IntiAmount'
 /** Identificadores que usa IntiFly para volar monedas hacia cada sección. */
 export type VitalKey = 'wallet' | 'savings' | 'debt' | 'stress'
 
-const STRESS: Record<StressLevel, { label: string; bar: string; text: string }> = {
-  ok: { label: 'Tranquilo', bar: 'bg-turquesa', text: 'text-turquesa-700' },
-  alto: { label: 'Alto', bar: 'bg-dorado', text: 'text-dorado-700' },
-  critico: { label: 'Muy alto', bar: 'bg-deuda', text: 'text-deuda-700' },
+/**
+ * light: tarjeta blanca sobre crema (portada, catálogo).
+ * night: dentro de la cabecera nocturna de la app. La billetera brilla en dorado: es el Inti.
+ */
+export type WalletBarTone = 'light' | 'night'
+
+const THEME = {
+  light: {
+    panel: 'bg-superficie shadow-card',
+    divider: 'divide-crema-200',
+    label: 'text-tinta-suave',
+    wallet: 'text-tinta',
+    walletIcon: '',
+    savings: 'text-ahorro-700',
+    savingsIcon: '',
+    debt: 'text-deuda-700',
+    debtCell: 'bg-deuda-50',
+    track: 'bg-crema-200',
+    skeleton: 'light',
+  },
+  night: {
+    panel: 'bg-white/[0.07] ring-1 ring-inset ring-white/12',
+    divider: 'divide-white/10',
+    label: 'text-white/70',
+    wallet: 'text-inti-claro',
+    walletIcon: 'text-dorado',
+    savings: 'text-ahorro-300',
+    savingsIcon: 'text-ahorro-300',
+    debt: 'text-deuda-300',
+    debtCell: 'bg-deuda/20',
+    track: 'bg-white/15',
+    skeleton: 'night',
+  },
+} as const
+
+const STRESS: Record<
+  StressLevel,
+  { label: string; bar: string; text: Record<WalletBarTone, string> }
+> = {
+  ok: {
+    label: 'Tranquilo',
+    bar: 'bg-turquesa',
+    text: { light: 'text-turquesa-700', night: 'text-turquesa-300' },
+  },
+  alto: {
+    label: 'Alto',
+    bar: 'bg-dorado',
+    text: { light: 'text-dorado-700', night: 'text-dorado' },
+  },
+  critico: {
+    label: 'Muy alto',
+    bar: 'bg-deuda',
+    text: { light: 'text-deuda-700', night: 'text-deuda-300' },
+  },
 }
 
 interface VitalProps {
   vital: VitalKey
   label: ReactNode
   icon: ReactNode
+  labelClass: string
   children: ReactNode
   className?: string
 }
 
-function Vital({ vital, label, icon, children, className }: VitalProps) {
+function Vital({ vital, label, icon, labelClass, children, className }: VitalProps) {
   return (
     <div
       data-vital={vital}
-      className={cn(
-        'flex min-w-0 flex-col items-center gap-0.5 rounded-control px-1 py-1.5',
-        className,
-      )}
+      className={cn('flex min-w-0 flex-col items-center gap-0.5 px-1 py-1.5', className)}
     >
-      <dt className="flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wide text-tinta-suave">
+      <dt className={cn('flex items-center gap-1 text-xs font-medium', labelClass)}>
         {icon}
         {label}
       </dt>
-      <dd className="w-full text-center font-display text-base leading-tight">{children}</dd>
+      <dd className="w-full text-center font-display text-lg leading-tight">{children}</dd>
     </div>
   )
 }
@@ -45,25 +92,25 @@ function Vital({ vital, label, icon, children, className }: VitalProps) {
 export interface WalletBarProps {
   /** null mientras carga el estado del alumno. */
   vitals: Vitals | null
+  tone?: WalletBarTone
   className?: string
 }
 
 /** La VitalBar: billetera · ahorros · deuda · estrés. Siempre visible arriba en GameLayout. */
-export function WalletBar({ vitals, className }: WalletBarProps) {
+export function WalletBar({ vitals, tone = 'light', className }: WalletBarProps) {
+  const theme = THEME[tone]
+
   if (!vitals) {
     return (
       <div
-        className={cn(
-          'grid grid-cols-4 gap-1 rounded-card bg-superficie p-2 shadow-card',
-          className,
-        )}
+        className={cn('grid grid-cols-4 gap-1 rounded-card p-2', theme.panel, className)}
         aria-busy="true"
         aria-label="Cargando tu estado financiero"
       >
         {Array.from({ length: 4 }, (_, i) => (
           <div key={i} className="flex flex-col items-center gap-1.5 py-1.5">
-            <Skeleton className="h-3 w-12" />
-            <Skeleton className="h-5 w-14" />
+            <Skeleton tone={theme.skeleton} className="h-3 w-12" />
+            <Skeleton tone={theme.skeleton} className="h-5 w-14" />
           </div>
         ))}
       </div>
@@ -78,33 +125,53 @@ export function WalletBar({ vitals, className }: WalletBarProps) {
     <section aria-label="Tu estado financiero">
       <dl
         className={cn(
-          'grid grid-cols-4 gap-1 rounded-card bg-superficie p-2 shadow-card',
+          'grid grid-cols-4 divide-x rounded-card p-1.5',
+          theme.panel,
+          theme.divider,
           className,
         )}
       >
-        <Vital vital="wallet" label="Billetera" icon={<Wallet aria-hidden className="size-3.5" />}>
-          <IntiAmount value={vitals.wallet} tone="neutral" />
+        <Vital
+          vital="wallet"
+          label="Billetera"
+          labelClass={theme.label}
+          icon={<Wallet aria-hidden className={cn('size-3.5', theme.walletIcon)} />}
+        >
+          <IntiAmount value={vitals.wallet} tone="neutral" className={theme.wallet} />
         </Vital>
 
         <Vital
           vital="savings"
           label="Ahorros"
-          icon={<PiggyBank aria-hidden className="size-3.5" />}
+          labelClass={theme.label}
+          icon={<PiggyBank aria-hidden className={cn('size-3.5', theme.savingsIcon)} />}
         >
-          <IntiAmount value={vitals.savings} tone="ahorro" />
+          <IntiAmount value={vitals.savings} tone="neutral" className={theme.savings} />
         </Vital>
 
         <Vital
           vital="debt"
           label="Deuda"
-          icon={hasDebt ? <TriangleAlert aria-hidden className="size-3.5 text-deuda-700" /> : null}
-          className={hasDebt ? 'bg-deuda-50' : undefined}
+          labelClass={theme.label}
+          icon={
+            hasDebt ? <TriangleAlert aria-hidden className={cn('size-3.5', theme.debt)} /> : null
+          }
+          className={hasDebt ? cn('rounded-control', theme.debtCell) : undefined}
         >
-          <IntiAmount value={vitals.debt} tone={hasDebt ? 'deuda' : 'neutral'} />
+          <IntiAmount
+            value={vitals.debt}
+            tone="neutral"
+            className={hasDebt ? theme.debt : theme.wallet}
+          />
           {hasDebt ? <span className="sr-only">Tienes deuda pendiente.</span> : null}
         </Vital>
 
-        <Vital vital="stress" label="Estrés" icon={<Flame aria-hidden className="size-3.5" />}>
+        <Vital
+          vital="stress"
+          label="Estrés"
+          labelClass={theme.label}
+          icon={<Flame aria-hidden className={cn('size-3.5', stress.text[tone])} />}
+        >
           <div
             role="meter"
             aria-label="Estrés"
@@ -112,19 +179,30 @@ export function WalletBar({ vitals, className }: WalletBarProps) {
             aria-valuemax={100}
             aria-valuenow={Math.round(vitals.stress * 100)}
             aria-valuetext={`${formatPercent(vitals.stress)}, ${stress.label.toLowerCase()}`}
-            className="flex flex-col items-center gap-1 pt-1"
+            className="flex flex-col items-center gap-1"
           >
-            <div className="h-2 w-full max-w-16 overflow-hidden rounded-full bg-crema-200">
-              <motion.div
-                className={cn('h-full rounded-full', stress.bar)}
-                initial={false}
-                animate={{ width: formatPercent(vitals.stress) }}
-                transition={{ duration: 0.5, ease: 'easeOut' }}
+            <span aria-hidden className={cn('font-semibold tabular-nums', stress.text[tone])}>
+              {formatPercent(vitals.stress)}
+            </span>
+            <div className={cn('h-1.5 w-full max-w-14 overflow-hidden rounded-full', theme.track)}>
+              {/* Transición CSS: no anima al montar (igual que initial={false}), sí cuando cambia. */}
+              <div
+                className={cn(
+                  'h-full rounded-full transition-[width] duration-500 ease-out',
+                  stress.bar,
+                )}
+                style={{ width: formatPercent(vitals.stress) }}
               />
             </div>
-            <span className={cn('text-xs font-semibold tabular-nums', stress.text)} aria-hidden>
-              {formatPercent(vitals.stress)} · {stress.label}
-            </span>
+            {/* El nivel solo se escribe cuando preocupa: así no depende del color y llama la atención. */}
+            {level === 'ok' ? null : (
+              <span
+                aria-hidden
+                className={cn('font-sans text-[11px] font-semibold', stress.text[tone])}
+              >
+                {stress.label}
+              </span>
+            )}
           </div>
         </Vital>
       </dl>

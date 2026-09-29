@@ -5,6 +5,9 @@ import { resetMockDb } from '@/mocks/db'
 import { useAuthStore } from '@/core/store/authStore'
 import { server } from './server'
 
+// jsdom no implementa scrollTo y ScrollRestoration lo llama en cada navegación.
+window.scrollTo = () => {}
+
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
 
 afterEach(() => {

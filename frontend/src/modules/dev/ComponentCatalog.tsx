@@ -1,10 +1,13 @@
 import { useRef, useState, type ReactNode } from 'react'
 import { Link } from 'react-router'
+import { paths } from '@/app/paths'
 import { Coins, Sparkles, TriangleAlert } from 'lucide-react'
+import { useDocumentTitle } from '@/core/hooks/useDocumentTitle'
 import type { Vitals } from '@/core/utils/vitals'
 import { IntiAmount } from '@/design-system/money/IntiAmount'
 import { useIntiFly } from '@/design-system/money/useIntiFly'
 import { WalletBar } from '@/design-system/money/WalletBar'
+import { HorizonEdge } from '@/design-system/AndeanDawn'
 import { Logo } from '@/design-system/Logo'
 import { RBadge } from '@/design-system/RBadge'
 import { RButton } from '@/design-system/RButton'
@@ -22,6 +25,15 @@ const PALETTE = [
   ['deuda', '#C4472F', 'bg-deuda'],
   ['turquesa', '#2AA8A0', 'bg-turquesa'],
   ['morado', '#7B3FA0', 'bg-morado'],
+] as const
+
+/** Tonos de la portada que usan la cabecera y la navegación de la app. */
+const DAWN = [
+  ['anil', '#2B2154', 'bg-anil'],
+  ['cerro', '#3B2C63', 'bg-cerro'],
+  ['cerro-oscuro', '#232A4D', 'bg-cerro-oscuro'],
+  ['alba', '#EC8A3F', 'bg-alba'],
+  ['inti-claro', '#FFD37A', 'bg-inti-claro'],
 ] as const
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
@@ -49,6 +61,7 @@ export function ComponentCatalog() {
   const [loading, setLoading] = useState(false)
   const flyFrom = useRef<HTMLButtonElement>(null)
   const fly = useIntiFly()
+  useDocumentTitle('Design system')
 
   const earn = () => {
     setVitals((v) => ({ ...v, wallet: v.wallet + 60 }))
@@ -61,19 +74,25 @@ export function ComponentCatalog() {
   }
 
   return (
-    <div className="mx-auto flex max-w-lg flex-col gap-8 px-gutter py-6">
+    <div className="mx-auto flex max-w-lg flex-col gap-8 px-gutter py-6 md:max-w-3xl md:px-6">
       <header className="flex items-center justify-between">
         <Logo />
-        <Link to="/" className="text-sm font-semibold text-fucsia-700 hover:underline">
+        <Link to={paths.app} className="text-sm font-semibold text-fucsia-700 hover:underline">
           Ir a la app
         </Link>
       </header>
       <h1 className="text-3xl">Design system</h1>
 
       <Section title="VitalBar + IntiFly">
-        <div className="sticky top-2 z-10">
-          <WalletBar vitals={showSkeleton ? null : vitals} />
+        {/* Así se ve dentro de la app: en la cabecera nocturna, sobre los cerros. */}
+        <div className="sticky top-2 z-10 overflow-hidden rounded-sheet shadow-raised">
+          <div className="bg-noche-alta px-3 pb-1 pt-3">
+            <WalletBar tone="night" vitals={showSkeleton ? null : vitals} />
+          </div>
+          <HorizonEdge animated={false} />
         </div>
+        <p className="text-sm text-tinta-suave">Versión clara (la usa el celular de la portada):</p>
+        <WalletBar vitals={showSkeleton ? null : vitals} />
         <div className="grid grid-cols-2 gap-2">
           <RButton ref={flyFrom} icon={<Coins aria-hidden className="size-5" />} onClick={earn}>
             Cobrar ⵊ60
@@ -123,6 +142,16 @@ export function ComponentCatalog() {
         <div className="grid grid-cols-4 gap-2">
           {PALETTE.map(([name, hex, className]) => (
             <div key={name} className="flex flex-col items-center gap-1 text-xs">
+              <span className={`size-12 rounded-control ${className}`} />
+              <span className="font-semibold">{name}</span>
+              <span className="text-tinta-suave">{hex}</span>
+            </div>
+          ))}
+        </div>
+        <p className="text-sm font-semibold">Amanecer andino</p>
+        <div className="grid grid-cols-5 gap-2">
+          {DAWN.map(([name, hex, className]) => (
+            <div key={name} className="flex flex-col items-center gap-1 text-center text-xs">
               <span className={`size-12 rounded-control ${className}`} />
               <span className="font-semibold">{name}</span>
               <span className="text-tinta-suave">{hex}</span>

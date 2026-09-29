@@ -18,11 +18,25 @@ export function SunMark({ className }: { className?: string }) {
   )
 }
 
-export function Logo({ className }: { className?: string }) {
+/** tone="light" para fondos oscuros (portada, login). */
+export function Logo({
+  className,
+  tone = 'dark',
+}: {
+  className?: string
+  tone?: 'dark' | 'light'
+}) {
   return (
     <span className={cn('inline-flex items-center gap-2', className)}>
       <SunMark />
-      <span className="font-display text-xl font-semibold text-fucsia-700">Riqchariy</span>
+      <span
+        className={cn(
+          'font-display text-xl font-semibold',
+          tone === 'light' ? 'text-white' : 'text-fucsia-700',
+        )}
+      >
+        Riqchariy
+      </span>
     </span>
   )
 }

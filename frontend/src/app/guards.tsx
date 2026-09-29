@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Navigate, Outlet, useLocation } from 'react-router'
 import { hasValidSession, useAuthStore } from '@/core/store/authStore'
+import { paths } from './paths'
 
 /** Deja pasar solo con sesión válida; si no, manda a /login recordando a dónde iba. */
 export function RequireAuth() {
@@ -16,7 +17,9 @@ export function RequireAuth() {
   }, [token, valid, logout])
 
   if (!valid) {
-    return <Navigate to="/login" replace state={{ from: location.pathname + location.search }} />
+    return (
+      <Navigate to={paths.login} replace state={{ from: location.pathname + location.search }} />
+    )
   }
   return <Outlet />
 }
@@ -32,7 +35,7 @@ export function GuestOnly() {
   const location = useLocation()
   if (hasValidSession({ token, expiresAt })) {
     const from = (location.state as { from?: string } | null)?.from
-    return <Navigate to={from ?? '/'} replace />
+    return <Navigate to={from ?? paths.app} replace />
   }
   return <Outlet />
 }

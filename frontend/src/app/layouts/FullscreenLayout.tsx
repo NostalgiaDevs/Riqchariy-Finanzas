@@ -1,12 +1,13 @@
 import { Link, Outlet } from 'react-router'
 import { ArrowLeft } from 'lucide-react'
+import { paths } from '../paths'
 
 /** Pantalla completa sin VitalBar ni bottom nav: minijuegos y onboarding. */
 export function FullscreenLayout() {
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-lg flex-col px-gutter pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(0.5rem,env(safe-area-inset-top))]">
+    <div className="mx-auto flex min-h-dvh w-full max-w-lg flex-col px-gutter md:max-w-3xl md:px-6 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(0.5rem,env(safe-area-inset-top))]">
       <Link
-        to="/"
+        to={paths.app}
         className="-ml-2 flex min-h-touch w-fit items-center gap-1.5 rounded-full px-2 text-sm font-semibold text-tinta-suave hover:bg-crema-200"
       >
         <ArrowLeft aria-hidden className="size-4" />

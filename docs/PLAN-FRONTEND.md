@@ -154,6 +154,16 @@ Leyenda: 🔴 bloquea a otros · 🔗 depende del backend · ⭐ prioridad alta
 **Objetivo:** app deployada en Vercel, login funcionando con mocks, VitalBar visible con datos del contrato.
 
 > **Estado (2026-09-25):** ✅ código completo en `feat/frontend` · 36 tests pasando · build y lint limpios. Pendiente: revisión de tipos con BE y conectar Vercel.
+>
+> **Pulido UX/UI (2026-09-29):** la app toma la paleta de la portada (amanecer andino). Cabecera nocturna con la VitalBar (`WalletBar tone="night"`, billetera en dorado) y borde de cerros con el Inti (`HorizonEdge`); bottom nav oscuro con pestaña activa en dorado. Home con "Mañana es el día N" (lugar del futuro *Avanzar día*), meta con lo que falta y accesos a Tienda/Misiones. Perfil con escalera de ligas. "Próximamente" y 404/error con el mismo cielo. Tokens nuevos en `tokens.css`: `anil`, `cerro`, `cerro-oscuro`, `alba`, `inti-claro` y tintes `-300` para texto sobre la noche. 43 tests.
+>
+> **Web responsive (2026-09-29):** la app ya no es solo una columna de celular. Celular (<768px): barra inferior. Tablet (768–1023px): barra inferior y contenido en 2 columnas. Laptop/PC (≥1024px): menú lateral (`SideNav`) con Tienda y Misiones, cabecera en una fila (logo · VitalBar · perfil) y contenido hasta 1152px como la portada. Se renderiza una sola navegación según `useIsDesktop()` (`core/hooks/useMediaQuery.ts`). Verificado sin scroll horizontal de 320px a 1920px. 45 tests.
+>
+> **Revisión final del Sprint 1 (2026-09-29):** corregidos: scroll que no volvía arriba al navegar (`ScrollRestoration` en `RootLayout`), página de fondo que se movía con un modal abierto, celular de la portada con el diseño viejo, título de pestaña por pantalla (`useDocumentTitle`), foco al primer campo con error y ayuda duplicada en formularios, "Saltar al contenido" en la app, zonas táctiles del footer de la portada, 404 que mandaba a la portada con sesión, rangos de ligas duplicados (ahora solo en `LEAGUES`). Optimización: framer-motion se carga en diferido (`LazyMotion`), −30 kB gzip en la primera carga (190.8 → 160.7 kB de JS); `vercel.json` con caché inmutable para `/assets`. 49 tests.
+>
+> **Home y Perfil completos (2026-09-29):** Home con frascos, deudas y score; Perfil con cabecera nocturna, credit score (`CreditScoreGauge`, adelantado de S2.FE.02), trabajo, cosas y logros. Pantallas "Próximamente" con la lista de lo que traerá cada una.
+>
+> **Pendiente del Sprint 1 (no es código):** conectar Vercel (S1.FE.04) y revisar los tipos del contrato con BE (FE-00).
 
 #### FE-00 · Tipos del contrato + cliente API + mocks 🔴 (soporte de `S1.BE.04`)
 - [x] `types/` escritos a partir de `docs/api/endpoints-piloto.md` (`PlayerState`, `Loan`, `Savings`, `NextDayResponse`, `DecisionPreview`, `ShopItem`, `LeaderboardResponse`, `Mission`, `ChatResponse`, `GameResultRequest`...)

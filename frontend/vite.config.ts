@@ -26,11 +26,8 @@ export default defineConfig({
               priority: 3,
             },
             { name: 'router', test: /node_modules[\\/]react-router[\\/]/, priority: 2 },
-            {
-              name: 'motion',
-              test: /node_modules[\\/](framer-motion|motion-dom|motion-utils)[\\/]/,
-              priority: 2,
-            },
+            // framer-motion no va en un grupo: su motor se importa de forma dinámica
+            // (src/core/motion/features.ts) y un grupo lo volvería a meter en la carga inicial.
           ],
         },
       },

@@ -41,6 +41,39 @@
   }
 }
 
+/* Cielo antes del amanecer: noche andina que se calienta hacia el horizonte (portada y login). */
+@utility bg-noche {
+  background-color: var(--color-tinta);
+  background-image: linear-gradient(
+    180deg,
+    #141b2e 0%,
+    #191c3d 40%,
+    #2b2154 62%,
+    #5e2f80 78%,
+    #b83b6f 91%,
+    #ec8a3f 100%
+  );
+}
+
+/* La parte alta del mismo cielo: para la cabecera de la app, donde no cabe el degradado completo. */
+@utility bg-noche-alta {
+  background-color: var(--color-tinta);
+  background-image: linear-gradient(180deg, #141b2e 0%, #191c3d 55%, #2b2154 100%);
+}
+
+/* Scroll suave solo en la portada (anclas del menú). En el resto, al cambiar de pantalla
+ * el salto arriba de ScrollRestoration debe ser inmediato, no una animación. */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-smooth-scroll] {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Con un modal abierto, la página de atrás no se desplaza (en celular se movía al arrastrar). */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   ::before,

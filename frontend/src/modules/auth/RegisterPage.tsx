@@ -2,10 +2,13 @@ import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { useMutation } from '@tanstack/react-query'
 import { authApi } from '@/core/api/endpoints'
+import { paths } from '@/app/paths'
+import { useDocumentTitle } from '@/core/hooks/useDocumentTitle'
 import { useAuthStore } from '@/core/store/authStore'
 import { RButton } from '@/design-system/RButton'
 import { RInput } from '@/design-system/RInput'
 import { AuthLayout } from './AuthLayout'
+import { focusFirstInvalid } from './focusFirstInvalid'
 import { FormError } from './FormError'
 import { PasswordInput } from './PasswordInput'
 import { validateRegister, type RegisterFieldErrors } from './validation'
@@ -17,6 +20,7 @@ export function RegisterPage() {
   const [password, setPassword] = useState('')
   const [classroomCode, setClassroomCode] = useState('')
   const [fieldErrors, setFieldErrors] = useState<RegisterFieldErrors>({})
+  useDocumentTitle('Crear cuenta')
 
   const register = useMutation({
     mutationFn: authApi.register,
@@ -27,7 +31,7 @@ export function RegisterPage() {
         user: { player_id: data.player_id, alias: data.alias },
         expiresIn: 86400,
       })
-      navigate('/', { replace: true })
+      navigate(paths.app, { replace: true })
     },
   })
 
@@ -40,7 +44,10 @@ export function RegisterPage() {
     }
     const errors = validateRegister(values)
     setFieldErrors(errors)
-    if (Object.keys(errors).length > 0) return
+    if (Object.keys(errors).length > 0) {
+      focusFirstInvalid(event.currentTarget, errors)
+      return
+    }
     register.mutate(values)
   }
 
@@ -48,11 +55,15 @@ export function RegisterPage() {
     <AuthLayout
       title="Crea tu cuenta"
       subtitle="Tu profe te dio un código de aula. Con eso basta."
+      aside={{
+        title: 'Tu primer sueldo en Pacha: ⵊ60 a la semana.',
+        text: 'Sin dinero real y sin tu nombre real. Solo un alias, una contraseña y el código de tu aula.',
+      }}
       footer={
         <>
           ¿Ya tienes cuenta?{' '}
           <Link
-            to="/login"
+            to={paths.login}
             className="font-semibold text-fucsia-700 underline-offset-2 hover:underline"
           >
             Entra aquí

@@ -1,39 +1,26 @@
-import type { ComponentType, SVGProps } from 'react'
 import { NavLink } from 'react-router'
-import { Gamepad2, House, Landmark, MessageCircle, Trophy } from 'lucide-react'
 import { cn } from '@/core/utils/cn'
+import { PRIMARY_NAV } from './navItems'
 
-interface NavItem {
-  to: string
-  label: string
-  icon: ComponentType<SVGProps<SVGSVGElement>>
-  end?: boolean
-}
-
-const NAV_ITEMS: NavItem[] = [
-  { to: '/', label: 'Inicio', icon: House, end: true },
-  { to: '/bank', label: 'Banco', icon: Landmark },
-  { to: '/games', label: 'Juegos', icon: Gamepad2 },
-  { to: '/ranking', label: 'Ranking', icon: Trophy },
-  { to: '/chatbot', label: 'Qori', icon: MessageCircle },
-]
-
+/** Celular y tablet. En laptop/PC la reemplaza SideNav. */
 export function BottomNav() {
   return (
+    // Misma noche que la cabecera (y que el header y el footer de la portada): el contenido
+    // crema queda enmarcado entre cielo arriba y cielo abajo.
     <nav
       aria-label="Navegación principal"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-crema-200 bg-superficie/95 shadow-nav backdrop-blur"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-tinta/95 shadow-nav backdrop-blur"
     >
-      <ul className="mx-auto flex h-nav max-w-lg items-stretch px-1 pb-[env(safe-area-inset-bottom)] box-content">
-        {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
+      <ul className="mx-auto flex h-nav max-w-lg items-stretch px-1 pb-[env(safe-area-inset-bottom)] box-content md:max-w-2xl">
+        {PRIMARY_NAV.map(({ to, label, icon: Icon, end }) => (
           <li key={to} className="flex flex-1">
             <NavLink
               to={to}
               end={end}
               className={({ isActive }) =>
                 cn(
-                  'group flex min-h-touch flex-1 flex-col items-center justify-center gap-0.5 text-xs font-semibold transition-colors',
-                  isActive ? 'text-fucsia-700' : 'text-tinta-suave hover:text-tinta',
+                  'group flex min-h-touch flex-1 flex-col items-center justify-center gap-0.5 text-xs font-semibold transition-colors md:text-sm',
+                  isActive ? 'text-white' : 'text-white/65 hover:text-white',
                 )
               }
             >
@@ -42,7 +29,7 @@ export function BottomNav() {
                   <span
                     className={cn(
                       'grid h-8 w-14 place-items-center rounded-full transition-colors',
-                      isActive ? 'bg-fucsia-50' : 'group-hover:bg-crema-200',
+                      isActive ? 'bg-white/12 text-dorado' : 'group-hover:bg-white/8',
                     )}
                   >
                     <Icon aria-hidden className="size-5" strokeWidth={isActive ? 2.5 : 2} />

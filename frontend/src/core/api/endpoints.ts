@@ -1,7 +1,7 @@
 // Una función por endpoint de docs/api/endpoints-piloto.md.
 // Los componentes no llaman a fetch directamente: usan estas funciones (vía hooks de TanStack Query).
 
-import { apiRequest, HEALTH_URL } from './client'
+import { ApiError, apiRequest, HEALTH_URL, readErrorMessage } from './client'
 import type {
   ChatRequest,
   ChatResponse,
@@ -73,8 +73,15 @@ export const missionsApi = {
     }),
 }
 
-/** /health está fuera de /api/v1 y no requiere token. */
+/** /health está fuera de /api/v1 y no requiere token. Un 5xx (o un backend dormido en Render) lanza ApiError. */
 export async function getHealth(): Promise<HealthResponse> {
-  const response = await fetch(HEALTH_URL)
-  return response.json() as Promise<HealthResponse>
+  let response: Response
+  try {
+    response = await fetch(HEALTH_URL)
+  } catch {
+    throw new ApiError(0, readErrorMessage(0, null))
+  }
+  const payload: unknown = await response.json().catch(() => null)
+  if (!response.ok) throw new ApiError(response.status, readErrorMessage(response.status, payload))
+  return payload as HealthResponse
 }

@@ -45,6 +45,21 @@
   --color-morado: #7b3fa0;
   --color-morado-50: #f1e8f7;
 
+  /* ── Amanecer andino (portada) ──
+   * El cielo va de tinta a añil; los cerros tapan el horizonte y el Inti asoma detrás.
+   * La cabecera y la navegación de la app usan estos mismos tonos para que la app
+   * se sienta parte de la portada y no otro producto. */
+  --color-anil: #2b2154;
+  --color-cerro: #3b2c63; /* cordillera lejana */
+  --color-cerro-oscuro: #232a4d; /* cordillera media */
+  --color-alba: #ec8a3f; /* horizonte naranja */
+  --color-inti-claro: #ffd37a;
+
+  /* Texto sobre la noche: los tonos base no llegan a AA sobre tinta/añil. */
+  --color-ahorro-300: #7fdcaa;
+  --color-deuda-300: #ff9c86;
+  --color-turquesa-300: #6fd6cf;
+
   /* ── Tipografía ──
    * 'Noto Sans Tifinagh' va en ambas pilas solo por el símbolo ⵊ (U+2D4A): no todos los celulares
    * traen una fuente Tifinagh. Por unicode-range, se descarga (~18 KB) solo si aparece el símbolo. */
@@ -70,6 +85,39 @@
 
   /* ── Animaciones ── */
   --animate-shimmer: shimmer 1.4s ease-in-out infinite;
+  /* El Inti sale detrás de los cerros una sola vez, al cargar la portada. */
+  --animate-amanecer: amanecer 2.4s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+  /* Entrada de cada pantalla de la app (GameLayout). "backwards" y no "both": al terminar no deja
+   * un transform activo, que convertiría al contenedor en referencia de los position: fixed hijos. */
+  --animate-entrada: entrada 0.18s ease-out backwards;
+
+  @keyframes entrada {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+
+  /* Versión corta para la cabecera de la app: corre una vez al entrar (el layout no se desmonta). */
+  --animate-asomar: asomar 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+
+  @keyframes asomar {
+    from {
+      transform: translateY(16px);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes amanecer {
+    from {
+      transform: translateY(110px);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
 
   @keyframes shimmer {
     0% {

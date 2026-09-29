@@ -14,6 +14,34 @@ Entra con **alumno1** / **demo1234** (hay de `alumno1` a `alumno10`). Para regis
 
 Catálogo de componentes (VitalBar, IntiFly, botones, modal…): **http://localhost:5173/dev/componentes**
 
+## Rutas
+
+| Ruta                                | Qué es                                                                       |
+| ----------------------------------- | ---------------------------------------------------------------------------- |
+| `/`                                 | Portada pública (qué es Riqchariy, ligas, colegios)                          |
+| `/login`, `/register`               | Entrar y crear cuenta (con sesión, redirigen a `/app`)                       |
+| `/app`                              | Home "Mi Vida" (exige sesión; todo el juego vive bajo `/app`)                |
+| `/app/bank`, `/app/games`, `/app/…` | Pantallas del juego (las de sprints futuros muestran "Llega en el Sprint N") |
+| `/dev/componentes`                  | Catálogo del design system (solo en dev o con mocks)                         |
+
+Las rutas se definen en `src/app/paths.ts`: usa `paths.bank` en vez de escribir `'/app/bank'`.
+
+## Responsive
+
+La app se adapta a celular, tablet y laptop/PC (mismos cortes que Tailwind):
+
+- **Celular (<768px):** barra de navegación inferior, una columna.
+- **Tablet (768–1023px):** barra inferior, contenido en 2 columnas.
+- **Laptop/PC (≥1024px):** menú lateral (`SideNav`), cabecera en una fila, contenido hasta 1152px.
+
+Solo se renderiza una navegación a la vez (`useIsDesktop()` en `src/core/hooks/useMediaQuery.ts`).
+
+## Animaciones
+
+framer-motion carga su motor aparte (`src/core/motion/features.ts`) para no frenar la primera pantalla.
+Por eso se usa **`m.div`** y no `motion.div` (`LazyMotion strict` avisa si alguien usa `motion.*`).
+Para animaciones simples (entrar, cambiar un ancho) basta con CSS.
+
 ## Mocks vs. backend real
 
 | Variable         | Valor                   | Efecto                                                                                    |

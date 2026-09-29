@@ -28,9 +28,16 @@ export function stressLevel(stress: number): StressLevel {
   return 'ok'
 }
 
-export const LEAGUES: Record<League, { name: string; icon: string }> = {
-  chaski: { name: 'Chaski', icon: '🏃' },
-  qollqa: { name: 'Qollqa', icon: '🏛️' },
-  amauta: { name: 'Amauta', icon: '📜' },
-  apu: { name: 'Apu', icon: '🏔️' },
+/**
+ * Ligas y sus rangos de score (balance.yaml → leagues). Única fuente para la portada, el Perfil
+ * y, más adelante, el Ranking: si el backend cambia un umbral, se cambia solo aquí.
+ */
+export const LEAGUES: Record<League, { name: string; icon: string; min: number; max: number }> = {
+  chaski: { name: 'Chaski', icon: '🏃', min: 0, max: 300 },
+  qollqa: { name: 'Qollqa', icon: '🏛️', min: 301, max: 550 },
+  amauta: { name: 'Amauta', icon: '📜', min: 551, max: 750 },
+  apu: { name: 'Apu', icon: '🏔️', min: 751, max: 1000 },
 }
+
+/** Orden de ascenso, de Chaski a Apu. */
+export const LEAGUE_ORDER: League[] = ['chaski', 'qollqa', 'amauta', 'apu']

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { examplePlayerState, freshPlayerState } from '@/mocks/fixtures'
-import { selectVitals, stressLevel } from './vitals'
+import { LEAGUE_ORDER, LEAGUES, selectVitals, stressLevel } from './vitals'
 
 describe('selectVitals', () => {
   it('suma los 3 frascos como ahorros y lo pendiente de los préstamos como deuda', () => {
@@ -26,5 +26,16 @@ describe('stressLevel', () => {
     expect(stressLevel(0.61)).toBe('alto')
     expect(stressLevel(0.8)).toBe('alto')
     expect(stressLevel(0.81)).toBe('critico')
+  })
+})
+
+describe('LEAGUES', () => {
+  it('los rangos cubren de 0 a 1000 sin huecos ni solapes (balance.yaml → leagues)', () => {
+    const ranges = LEAGUE_ORDER.map((id) => LEAGUES[id])
+    expect(ranges[0]!.min).toBe(0)
+    expect(ranges.at(-1)!.max).toBe(1000)
+    for (let i = 1; i < ranges.length; i++) {
+      expect(ranges[i]!.min).toBe(ranges[i - 1]!.max + 1)
+    }
   })
 })
