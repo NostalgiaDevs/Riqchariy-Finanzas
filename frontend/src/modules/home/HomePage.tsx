@@ -1,6 +1,6 @@
 import type { ComponentType, SVGProps } from 'react'
 import { Link } from 'react-router'
-import { CircleCheck, ChevronRight, ShoppingBag, Store, Target, TriangleAlert } from 'lucide-react'
+import { CircleCheck, ChevronRight, Target, TriangleAlert } from 'lucide-react'
 import { paths } from '@/app/paths'
 import { useDocumentTitle } from '@/core/hooks/useDocumentTitle'
 import { useIsDesktop } from '@/core/hooks/useMediaQuery'
@@ -16,6 +16,7 @@ import { Skeleton } from '@/design-system/Skeleton'
 import { buttonClasses } from '@/design-system/buttonStyles'
 import { ScoreCard } from '@/modules/shared/ScoreCard'
 import type { JarId, LoanProduct, PlayerState } from '@/types/economy'
+import { Sprint2Home } from './Sprint2Home'
 
 /** Metas del onboarding (PLAN-FRONTEND S4.FE.01). Cualquier otra usa el ícono genérico. */
 const GOAL_ICONS: Record<string, string> = {
@@ -45,20 +46,29 @@ const cardLinkClass =
   'inline-flex min-h-touch items-center gap-1 self-start font-semibold text-fucsia-700 hover:underline'
 
 /**
- * Home "Mi Vida" — versión Sprint 1: saludo, el próximo día, tu plata (meta, frascos, deudas),
- * tu score y accesos. Todo es lectura de GET /pacha/state: no se calcula economía aquí.
- * En Sprint 2 (S2.FE.01) la tarjeta del próximo día recibe "Avanzar día" y los eventos.
+ * Home "Mi Vida": estado, acciones del día y accesos a Pacha.
  */
 export function HomePage() {
   const alias = useAuthStore((state) => state.user?.alias)
-  const { data: state, isPending } = usePlayerState()
+  const { data: state, isPending, isError, refetch } = usePlayerState()
   const isDesktop = useIsDesktop()
   useDocumentTitle('Inicio')
 
-  // Celular: una columna. Tablet en adelante: el próximo día y la meta lado a lado.
+  if (isError && !state) {
+    return (
+      <RCard padding="lg">
+        <h1 className="text-2xl">No pudimos cargar tu mundo</h1>
+        <p className="mt-2 text-tinta-suave">Revisa tu conexión e inténtalo otra vez.</p>
+        <button type="button" onClick={() => refetch()} className={cn(buttonClasses(), 'mt-4')}>
+          Reintentar
+        </button>
+      </RCard>
+    )
+  }
+
   return (
-    <div className="flex flex-col gap-5 md:grid md:grid-cols-2 md:gap-6">
-      <section className="md:col-span-2">
+    <div className="flex flex-col gap-5 md:gap-6">
+      <section>
         <h1 className="text-[1.75rem] lg:text-4xl">Hola, {alias ?? 'crack'}</h1>
         {isPending || !state ? (
           <Skeleton className="mt-2 h-6 w-52" />
@@ -72,93 +82,37 @@ export function HomePage() {
         )}
       </section>
 
-      {state ? <NextDayCard state={state} /> : <Skeleton className="h-52 w-full rounded-sheet" />}
-      {state ? <GoalCard state={state} /> : <Skeleton className="h-52 w-full rounded-card" />}
-      {state ? <DebtCard state={state} /> : <Skeleton className="h-52 w-full rounded-card" />}
-      {state ? (
-        <ScoreCard score={state.score}>
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-x-4 border-t border-crema-200 pt-3 text-sm">
-            <p className="text-tinta-suave">
-              Credit score{' '}
-              <strong className="font-semibold tabular-nums text-tinta">
-                {state.credit_score}
-              </strong>{' '}
-              de 850
-            </p>
-            <Link to={paths.profile} className={cardLinkClass}>
-              Ver mi perfil <ChevronRight aria-hidden className="size-4" />
-            </Link>
-          </div>
-        </ScoreCard>
-      ) : (
-        <Skeleton className="h-52 w-full rounded-card" />
-      )}
+      {state && <Sprint2Home state={state} />}
+      <section aria-labelledby="progress-title">
+        <h2 id="progress-title" className="mb-3 text-xl">
+          Tu progreso
+        </h2>
+        <div className="grid items-start gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {state ? <GoalCard state={state} /> : <Skeleton className="h-52 w-full rounded-card" />}
+          {state ? <DebtCard state={state} /> : <Skeleton className="h-52 w-full rounded-card" />}
+          {state ? (
+            <ScoreCard score={state.score}>
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-x-4 border-t border-crema-200 pt-3 text-sm">
+                <p className="text-tinta-suave">
+                  Credit score{' '}
+                  <strong className="font-semibold tabular-nums text-tinta">
+                    {state.credit_score}
+                  </strong>{' '}
+                  de 850
+                </p>
+                <Link to={paths.profile} className={cardLinkClass}>
+                  Ver mi perfil <ChevronRight aria-hidden className="size-4" />
+                </Link>
+              </div>
+            </ScoreCard>
+          ) : (
+            <Skeleton className="h-52 w-full rounded-card" />
+          )}
+        </div>
+      </section>
       {/* En laptop/PC, Tienda y Misiones ya están en el menú lateral. */}
       {isDesktop ? null : <MoreLinks missions={state?.active_missions.length} />}
     </div>
-  )
-}
-
-/**
- * El lugar de "Avanzar día". Es la única tarjeta nocturna del Home: lo que pasa mañana
- * es lo más importante de la pantalla, y usa el mismo cielo que la cabecera.
- */
-function NextDayCard({ state }: { state: PlayerState }) {
-  const { job } = state
-  return (
-    <section
-      aria-labelledby="next-day-title"
-      className="relative flex flex-col overflow-hidden rounded-sheet bg-noche-alta text-white shadow-raised"
-    >
-      <DawnGlow className="absolute -right-16 -top-20 size-56" />
-
-      <div className="relative flex-1 p-5 lg:p-6">
-        <h2 id="next-day-title" className="text-xl">
-          Mañana es el día {state.current_tick + 1}
-        </h2>
-        <p className="mt-2 text-sm leading-relaxed text-white/75">
-          Muy pronto vas a avanzar tus días desde aquí: cobrar tu sueldo, pagar tus gastos y decidir
-          qué hacer cuando algo pase.
-        </p>
-      </div>
-
-      <div className="relative flex items-center gap-3 border-t border-white/10 bg-white/[0.04] px-5 py-3.5 lg:px-6">
-        <span className="grid size-10 shrink-0 place-items-center rounded-full bg-dorado/15 text-dorado">
-          <Store aria-hidden className="size-5" />
-        </span>
-        <div className="min-w-0 flex-1">
-          <p className="font-semibold leading-snug">{job.name}</p>
-          <p className="whitespace-nowrap text-sm text-white/70">
-            Desempeño {formatPercent(job.performance)}
-          </p>
-        </div>
-        <p className="shrink-0 text-right text-sm leading-tight text-white/70">
-          <IntiAmount
-            value={job.wage_per_week}
-            tone="neutral"
-            animated={false}
-            className="block font-display text-lg text-inti-claro"
-          />
-          por semana
-        </p>
-      </div>
-    </section>
-  )
-}
-
-/**
- * Luz de alba en la esquina: el sol ya está en la cabecera, aquí solo se nota que viene.
- * (Dos soles en la misma pantalla competían entre sí.)
- */
-function DawnGlow({ className }: { className?: string }) {
-  return (
-    <div
-      aria-hidden
-      className={cn(
-        'pointer-events-none rounded-full bg-[radial-gradient(circle,rgb(246_180_74/0.4)_0%,rgb(214_46_108/0.18)_45%,transparent_70%)]',
-        className,
-      )}
-    />
   )
 }
 
@@ -181,7 +135,7 @@ function GoalCard({ state }: { state: PlayerState }) {
     )
   }
 
-  const progress = Math.min(1, balance / goal_target)
+  const progress = Math.max(0, Math.min(1, balance / goal_target))
   const missing = Math.max(0, goal_target - balance)
   return (
     <RCard padding="lg" className="flex flex-col">
@@ -286,7 +240,8 @@ function DebtCard({ state }: { state: PlayerState }) {
       ) : (
         <ul className="mt-4 flex flex-col gap-5">
           {loans.map((loan) => {
-            const paid = loan.principal > 0 ? 1 - loan.remaining / loan.principal : 0
+            const paid =
+              loan.principal > 0 ? Math.max(0, Math.min(1, 1 - loan.remaining / loan.principal)) : 0
             return (
               <li key={loan.id}>
                 <div className="flex flex-wrap items-baseline justify-between gap-x-3">
@@ -339,16 +294,9 @@ interface MoreLink {
   iconClass: string
 }
 
-/** Tienda y Misiones no están en la barra de abajo: este es su acceso. */
+/** Misiones no está en la barra de abajo: este es su acceso en móvil. */
 function MoreLinks({ missions }: { missions?: number }) {
   const links: MoreLink[] = [
-    {
-      to: paths.shop,
-      title: 'Tienda',
-      text: 'Compra al contado o en cuotas',
-      icon: ShoppingBag,
-      iconClass: 'bg-fucsia-50 text-fucsia-700',
-    },
     {
       to: paths.missions,
       title: 'Misiones',
@@ -362,11 +310,11 @@ function MoreLinks({ missions }: { missions?: number }) {
   ]
 
   return (
-    <nav aria-labelledby="more-title" className="md:col-span-2">
+    <nav aria-labelledby="more-title">
       <h2 id="more-title" className="mb-2 text-lg">
         Más en Pacha
       </h2>
-      <ul className="divide-y divide-crema-200 overflow-hidden rounded-card bg-superficie shadow-card md:grid md:grid-cols-2 md:divide-x md:divide-y-0">
+      <ul className="overflow-hidden rounded-card bg-superficie shadow-card">
         {links.map(({ to, title, text, icon: Icon, iconClass }) => (
           <li key={to}>
             <Link
