@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router'
 import { useIsDesktop } from '@/core/hooks/useMediaQuery'
 import { usePlayerState } from '@/core/hooks/usePlayerState'
@@ -32,6 +32,10 @@ const DESKTOP_COLUMNS = 'lg:grid lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-x-10'
 export function GameLayout() {
   const location = useLocation()
   const isDesktop = useIsDesktop()
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [location.pathname])
 
   return (
     <div className="flex min-h-dvh flex-col">
