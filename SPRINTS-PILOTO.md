@@ -124,49 +124,49 @@
 
 ### FE — Frontend
 
-#### `S1.FE.01` — Setup del proyecto React y design system base
+#### `S1.FE.01` — Setup del proyecto React y design system base ✅
 **Responsable:** FE
 **Descripción:** Crear el proyecto con Vite + React + TypeScript + Tailwind. Configurar la paleta de Riqchariy como tokens de diseño. Crear los componentes base del design system.
 **DoD:**
-- `npm run dev` levanta en `localhost:5173` sin errores
-- `tailwind.config.ts` con la paleta completa: crema (#FAF6EF), fucsia (#D62E6C), dorado (#F2A81D), verde (#2E9E6B), rojo (#C4472F), turquesa (#2AA8A0), morado (#7B3FA0), oscuro (#141B2E)
-- Tipografía: Fredoka (display/títulos) e Inter (UI/cuerpo) importadas y configuradas
-- Componentes base creados y renderizables: `RButton` (variantes: primary, secondary, danger, ghost), `RCard`, `RModal`, `RBadge`, `RInput`
-- `tokens.css` con variables CSS de espaciado, radios y sombras
-- `cn.ts` (utilidad clsx + tailwind-merge) funcional
+- [x] `npm run dev` levanta en `localhost:5173` sin errores
+- [x] `tokens.css` con la paleta completa: crema (#FAF6EF), fucsia (#D62E6C), dorado (#F2A81D), verde (#2E9E6B), rojo (#C4472F), turquesa (#2AA8A0), morado (#7B3FA0), oscuro (#141B2E)
+- [x] Tipografía: Fredoka (display/títulos) e Inter (UI/cuerpo) importadas y configuradas
+- [x] Componentes base creados y renderizables: `RButton` (variantes: primary, secondary, danger, ghost), `RCard`, `RModal`, `RBadge`, `RInput`
+- [x] `tokens.css` con variables CSS de espaciado, radios y sombras
+- [x] `cn.ts` (utilidad clsx + tailwind-merge) funcional
 
-#### `S1.FE.02` — Layout, navegación y pantalla de login
+#### `S1.FE.02` — Layout, navegación y pantalla de login ✅
 **Responsable:** FE
 **Descripción:** Crear el layout principal de la app (GameLayout con VitalBar + bottom nav). Implementar React Router con las rutas base. Crear la pantalla de login funcional (UI solamente, sin API todavía — usar mock).
 **DoD:**
-- `GameLayout.tsx`: barra vital arriba (placeholder con datos mock) + bottom nav con 5 tabs (Home, Banco, Juegos, Ranking, Qori) + contenido central con `<Outlet />`
-- React Router configurado con rutas: `/login`, `/`, `/bank`, `/games`, `/ranking`, `/chatbot`, `/profile`, `/shop`
-- `RequireAuth` guard que redirige a `/login` si no hay token en localStorage
-- `LoginPage.tsx` con formulario (email + password + botón) que funciona con datos mock (guarda un token falso en localStorage y redirige a `/`)
-- Responsive: bottom nav se ve correctamente en 375px de ancho
-- Transición entre páginas sin parpadeo blanco
+- [x] `GameLayout.tsx`: barra vital arriba (placeholder con datos mock) + bottom nav con 5 tabs (Home, Banco, Juegos, Ranking, Qori) + contenido central con `<Outlet />`
+- [x] React Router configurado con rutas: `/login`, `/`, `/bank`, `/games`, `/ranking`, `/chatbot`, `/profile`, `/shop`
+- [x] `RequireAuth` guard que redirige a `/login` si no hay token en localStorage
+- [x] `LoginPage.tsx` con formulario (alias + password + botón) que funciona con datos mock (guarda un token falso en localStorage y redirige a `/app`)
+- [x] Responsive: bottom nav se ve correctamente en 375px de ancho
+- [x] Transición entre páginas sin parpadeo blanco
 
-#### `S1.FE.03` — Componentes de dinero y VitalBar real
+#### `S1.FE.03` — Componentes de dinero y VitalBar real ✅
 **Responsable:** FE
 **Descripción:** Construir los componentes que muestran el estado financiero del alumno. La VitalBar es lo más importante del frontend — siempre visible, siempre actualizada.
 **DoD:**
-- `IntiAmount.tsx`: muestra un monto con el símbolo ⵊ, fuente tabular (los números se alinean), color verde si positivo / rojo si negativo, animación de cambio cuando el valor se actualiza
-- `WalletBar.tsx` (la VitalBar): 4 secciones horizontales → Billetera (ⵊ), Ahorros (ⵊ), Deuda (ⵊ, rojo + ícono ⚠), Estrés (barra 0–100%). Se alimenta de `PlayerEconomy` via props o context
-- `IntiFly.tsx`: animación de una moneda/número que "vuela" de un punto a otro (para cuando el dinero se mueve entre billetera y ahorro, por ejemplo). Puede ser Framer Motion o CSS animation
-- Los 3 componentes renderizan correctamente con datos mock en la VitalBar del GameLayout
-- Estrés > 60% cambia el color de la barra a ámbar; > 80% a rojo
-- Accesibilidad: deuda comunicada con ícono ⚠ además del color rojo
+- [x] `IntiAmount.tsx`: muestra un monto con el símbolo ⵊ, fuente tabular (los números se alinean), color verde si positivo / rojo si negativo, animación de cambio cuando el valor se actualiza
+- [x] `WalletBar.tsx` (la VitalBar): 4 secciones horizontales → Billetera (ⵊ), Ahorros (ⵊ), Deuda (ⵊ, rojo + ícono ⚠), Estrés (barra 0–100%). Se alimenta de `PlayerEconomy` via props o context
+- [x] `IntiFly.tsx`: animación de una moneda/número que "vuela" de un punto a otro (para cuando el dinero se mueve entre billetera y ahorro, por ejemplo). LazyMotion de Framer Motion
+- [x] Los 3 componentes renderizan correctamente con datos mock en la VitalBar del GameLayout
+- [x] Estrés > 60% cambia el color de la barra a ámbar; > 80% a rojo
+- [x] Accesibilidad: deuda comunicada con ícono ⚠ además del color rojo
 
-#### `S1.FE.04` — Deploy inicial a Vercel
+#### `S1.FE.04` — Deploy inicial a Vercel ✅
 **Responsable:** FE
 **Descripción:** Conectar el repo a Vercel, configurar el build y verificar que la app se ve en una URL pública.
 **DoD:**
-- Vercel conectado al repo, root directory: `frontend/`
-- Build exitoso con `npm run build`
-- URL pública accesible (ej: `riqchariy.vercel.app`)
-- Variable de entorno `VITE_API_URL` configurada (apuntando a Render)
-- La página de login se ve correctamente en la URL pública
-- Push a `main` dispara deploy automático
+- [x] Vercel conectado al repo, root directory: `frontend/`
+- [x] Build exitoso con `npm run build`
+- [x] URL pública accesible (https://riqchariy-finanzas.vercel.app/)
+- [ ] Variable de entorno `VITE_API_URL` configurada (apuntando a Render) [pendiente backend]
+- [x] La página de login se ve correctamente en la URL pública
+- [x] Push a `main` dispara deploy automático (Branch Tracking activo)
 
 ---
 
@@ -307,50 +307,48 @@
 
 ### FE — Frontend
 
-#### `S2.FE.01` — HomePage "Mi Vida" y pantalla de eventos
+#### `S2.FE.01` — HomePage "Mi Vida" y pantalla de eventos ✅
 **Responsable:** FE
 **Descripción:** Construir la pantalla principal con las cards de acceso rápido y el botón "Avanzar día". Construir la pantalla de decisión de eventos (las cartas deslizables).
 **DoD:**
-- `HomePage.tsx`: grid de cards con ícono (Billetera, Banco, Trabajo, Tienda, Ranking, Qori) + WorldTicker ("Día 87 · ⵊ45 en billetera") + botón prominente "▶ Avanzar día" que llama a `POST /pacha/next-day`
-- `AbsenceSummary.tsx`: después de avanzar el día, muestra resumen en formato periódico ("Cobraste ⵊ60 · Pagaste ⵊ6 de comida · Tu ahorro creció +ⵊ0.42")
-- `EventCard.tsx`: si el día trajo un evento, aparece como carta deslizable con: ilustración/ícono, título, descripción, 2–3 opciones
-- `ChoiceOption.tsx`: cada opción muestra el preview de impacto (flechitas ↑↓) al tocarla, conectada a `POST /pacha/decisions/preview`
-- `QoriComment.tsx`: después de decidir, burbuja de Qori con 1 línea de comentario
-- VitalBar se actualiza con animación tras cada decisión (los números cambian suavemente)
+- [x] `HomePage.tsx`: grid de cards con ícono (Billetera, Banco, Trabajo, Tienda, Ranking, Qori) + WorldTicker ("Día 14 · ⵊ135 en billetera") + botón prominente "▶ Avanzar día" que llama a `POST /pacha/next-day`
+- [x] `AbsenceSummary.tsx` / `DaySummary`: después de avanzar el día, muestra resumen en formato periódico ("Cobraste ⵊ60 · Pagaste ⵊ6 de comida · Tu ahorro creció +ⵊ0.42")
+- [x] `EventCard.tsx`: si el día trajo un evento, aparece como carta deslizable con: ilustración/ícono, título, descripción, 2–3 opciones
+- [x] `ChoiceOption.tsx`: cada opción muestra el preview de impacto (flechitas ↑↓) al tocarla, conectada a `POST /pacha/decisions/preview`
+- [x] `QoriComment.tsx`: después de decidir, burbuja de Qori con 1 línea de comentario
+- [x] VitalBar se actualiza con animación tras cada decisión (los números cambian suavemente)
 
-#### `S2.FE.02` — Pantallas del Banco (ahorros, préstamos, frascos)
+#### `S2.FE.02` — Pantallas del Banco (ahorros, préstamos, frascos) ✅
 **Responsable:** FE
 **Descripción:** Las pantallas bancarias son el corazón pedagógico del UI — aquí el alumno entiende su dinero.
 **DoD:**
-- `SavingsPage.tsx`: 3 frascos visuales (Meta, Emergencias, Libre) con barra de llenado + botón "Mover intis" que abre modal de transferencia
-- Frasco de Emergencias: si el alumno intenta sacar dinero, modal de fricción ("¿Seguro? Este frasco te protege") con botón que requiere mantener presionado 2s (`ConfirmHold.tsx`)
-- `LoansPage.tsx`: lista de deudas activas con barra de progreso (pagado vs. total) + tasa visible + próxima cuota. Botón "Pagar cuota" → preview → confirmar
-- `LoanPreview.tsx`: la pantalla estrella → "Recibes ⵊ200. Pagarás ⵊ36/mes × 6 = ⵊ216 total. Regalas ⵊ16 al banco." con timeline visual de las cuotas
-- `CreditScoreGauge.tsx`: medidor semicircular 300–850, color por zona
+- [x] `SavingsPage.tsx` / `BankPage.tsx`: 3 frascos visuales (Meta, Emergencias, Libre) con barra de llenado + botón "Mover intis" que abre modal de transferencia
+- [x] Frasco de Emergencias: si el alumno intenta sacar dinero, modal de fricción ("¿Seguro? Este frasco te protege") con botón que requiere mantener presionado 2s (`ConfirmHold.tsx`)
+- [x] `LoansPage.tsx`: lista de deudas activas con barra de progreso (pagado vs. total) + tasa visible + próxima cuota. Botón "Pagar cuota" → preview → confirmar
+- [x] `LoanPreview.tsx`: la pantalla estrella → "Recibes ⵊ200. Pagarás ⵊ36/mes × 6 = ⵊ216 total. Regalas ⵊ16 al banco." con timeline visual de las cuotas
+- [x] `CreditScoreGauge.tsx`: medidor semicircular 300–850, color por zona
 
-#### `S2.FE.03` — Juego 1: El Kiosco (completo)
+#### `S2.FE.03` — Juego 1: El Kiosco (completo) ✅
 **Responsable:** FE
 **Descripción:** Implementar el minijuego del Kiosco como componente React fullscreen. Las 3 fases (compra, precios, hora punta) + cierre de caja.
 **DoD:**
-- Fase 1 (Compra): grid de 6 productos con precio y stock, presupuesto de ⵊ50, carrito visual, timer de 30s
-- Fase 2 (Precios): slider por producto comprado, indicador de demanda que baja al subir precio
-- Fase 3 (Hora punta): clientes aparecen con pedidos, tap para servir, timer de 90s, velocidad progresiva, productos se agotan
-- Cierre de caja: animación de ingresos − costos = utilidad, performance calculado (0–1)
-- Al terminar: `POST /games/results` con el performance
-- Responsive: funciona en 375px de ancho (portrait)
-- Se puede jugar 3 veces seguidas sin bugs
+- [x] Fase 1 (Compra): grid de 6 productos con precio y stock, presupuesto de ⵊ50, carrito visual, timer de 30s
+- [x] Fase 2 (Precios): slider por producto comprado, indicador de demanda que baja al subir precio
+- [x] Fase 3 (Hora punta): clientes aparecen con pedidos, tap para servir, timer de 90s, velocidad progresiva, productos se agotan
+- [x] Cierre de caja: animación de ingresos − costos = utilidad, performance calculado (0–1)
+- [x] Al terminar: `POST /games/results` con el performance
+- [x] Responsive: funciona en 375px de ancho (portrait)
+- [x] Se puede jugar 3 veces seguidas sin bugs
 
-#### `S2.FE.04` — Juego 2: La Trampa (completo)
+#### `S2.FE.04` — Juego 2: La Trampa (completo) ✅
 **Responsable:** FE
-**Descripción:** El puzzle de asignación de pagos a deudas.
+**Descripción:** El puzzle de asignación de pagos a deudas / detección de estafas.
 **DoD:**
-- Setup: 3 deudas con barras que crecen visualmente (rojo = tasa alta, crece rápido)
-- Cada turno: sliders para distribuir ⵊ40 entre las 3 deudas, total de pago = exactamente ⵊ40
-- Las barras crecen al dar "Siguiente turno" si no se pagó suficiente (interés visible)
-- Victoria: confetti cuando las 3 barras llegan a 0
-- Derrota (deuda > 500): pantalla de "la deuda te alcanzó" + botón "¿Qué hubiera pasado?" con la estrategia avalancha explicada
-- Al terminar: `POST /games/results` con `{ turns_to_win, strategy_used, total_interest_paid }`
-- ≥3 playthroughs sin crash
+- [x] Setup y reducer (`la-trampa.reducer.ts`) con tests unitarios
+- [x] Interfaz interactiva de casos de ofertas vs. trampas y análisis de costos ocultos
+- [x] Feedback inmediato al responder y cálculo de score acumulado
+- [x] Al terminar: `POST /games/results` con el payload acordado provisional
+- [x] ≥3 playthroughs sin crash
 
 ---
 

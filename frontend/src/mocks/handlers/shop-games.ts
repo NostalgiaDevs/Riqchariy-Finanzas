@@ -74,18 +74,23 @@ export const gamesHandlers = [
       // Recompensa genérica: el backend real traduce cada juego a efectos distintos.
       const rawScore = 'score' in body.data ? body.data.score : 500
       const performance = round2(Math.min(1, Math.max(0, rawScore / 1000)))
-      const reward = Math.round(10 + performance * 25)
+      const reward = rawScore > 0 ? Math.round(10 + performance * 25) : 0
 
       const state = structuredClone(current)
       state.wallet += reward
-      if (body.game_id === 'kiosco') state.job.performance = performance
+      if (body.game_id === 'kiosco' && body.data.items_sold > 0) state.job.performance = performance
       mockDb.states.set(state.player_id, state)
 
       return HttpResponse.json<GameResultResponse>({
         reward,
-        performance_update: performance,
+        performance_update: state.job.performance,
         missions_progress: {},
-        message: `¡Buena partida! Ganaste ⵊ${reward}.`,
+        message:
+          rawScore <= 0
+            ? body.game_id === 'kiosco'
+              ? 'No hubo ventas. Compra mercadería antes de abrir y vuelve a intentarlo.'
+              : 'Aún no acertaste. Revisa las pistas y vuelve a intentarlo.'
+            : `¡Buena partida! Ganaste ⵊ${reward}.`,
       })
     }),
   ),

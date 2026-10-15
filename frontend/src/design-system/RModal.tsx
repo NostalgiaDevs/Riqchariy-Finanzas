@@ -65,11 +65,11 @@ export function RModal({
     >
       <div
         className={cn(
-          'rounded-t-sheet bg-superficie px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-5 shadow-raised sm:rounded-sheet',
+          'max-h-[calc(100dvh-0.5rem)] overflow-y-auto rounded-t-sheet bg-superficie px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-5 shadow-raised sm:rounded-sheet',
           className,
         )}
       >
-        <div className="flex items-start justify-between gap-3">
+        <div className="sticky top-0 z-10 flex items-start justify-between gap-3 bg-superficie py-1">
           <h2 id={titleId} className="text-xl">
             {title}
           </h2>

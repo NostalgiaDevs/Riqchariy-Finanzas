@@ -98,6 +98,15 @@
     }
   }
 
+  @keyframes hold-fill {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
   /* Versión corta para la cabecera de la app: corre una vez al entrar (el layout no se desmonta). */
   --animate-asomar: asomar 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
 
