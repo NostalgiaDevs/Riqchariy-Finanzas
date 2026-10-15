@@ -13,13 +13,14 @@ export interface KioscoResultData {
 }
 
 /**
- * PROVISIONAL: payload de PILOTO-2-SEMANAS (puzzle de deudas).
- * ALCANCE-MVP describe La Trampa como juego de estafas → ver PLAN-FRONTEND §10.1.
+ * PROVISIONAL: ALCANCE-MVP describe La Trampa como juego de estafas.
+ * /games/results aún no define el payload de este juego; coordinarlo con BE.
  */
 export interface LaTrampaResultData {
-  turns_to_win: number | null
-  strategy_used: 'avalanche' | 'snowball' | 'mixed'
-  total_interest_paid: number
+  /** PROVISIONAL hasta acordar el contrato de La Trampa con backend. */
+  score: number
+  correct_count: number
+  total_cases: number
 }
 
 /** PROVISIONAL: SPRINTS-PILOTO S3.BE.03. */

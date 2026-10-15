@@ -4,6 +4,9 @@ import { LoginPage } from '@/modules/auth/LoginPage'
 import { RegisterPage } from '@/modules/auth/RegisterPage'
 import { ComponentCatalog } from '@/modules/dev/ComponentCatalog'
 import { HomePage } from '@/modules/home/HomePage'
+import { BankPage } from '@/modules/bank/BankPage'
+import { GamesHub } from '@/modules/games/GamesHub'
+import { GameRoute } from '@/modules/games/GameRoute'
 import { LandingPage } from '@/modules/landing/LandingPage'
 import { ProfilePage } from '@/modules/profile/ProfilePage'
 import { ComingSoon } from '@/modules/shared/ComingSoon'
@@ -38,20 +41,7 @@ export const routes: RouteObject[] = [
               { index: true, element: <HomePage /> },
               {
                 path: 'bank',
-                element: (
-                  <ComingSoon
-                    title="Banco"
-                    icon="🏦"
-                    sprint={2}
-                    text="Tus frascos de ahorro, tus deudas y tu credit score."
-                    features={[
-                      'Mover intis entre tus frascos Meta, Emergencias y Libre',
-                      'Ver cada deuda: cuánto te falta, la tasa y cuándo vence la cuota',
-                      'Antes de pedir un préstamo, ver cuánto pagarás en total',
-                      'Seguir tu credit score, de 300 a 850',
-                    ]}
-                  />
-                ),
+                element: <BankPage />,
               },
               {
                 path: 'shop',
@@ -71,20 +61,7 @@ export const routes: RouteObject[] = [
               },
               {
                 path: 'games',
-                element: (
-                  <ComingSoon
-                    title="Juegos"
-                    icon="🎮"
-                    sprint={2}
-                    text="El Kiosco, La Trampa y tres juegos más."
-                    features={[
-                      'El Kiosco: compra mercadería, pon precios y atiende la hora punta',
-                      'La Trampa: decide a qué deuda pagarle primero',
-                      'Invierte o Pierde, Mercado Rápido y Qori Quiz',
-                      'Lo que logras en cada juego cambia tu sueldo o tu score',
-                    ]}
-                  />
-                ),
+                element: <GamesHub />,
               },
               {
                 path: 'ranking',
@@ -157,18 +134,7 @@ export const routes: RouteObject[] = [
               },
               {
                 path: 'games/:gameId',
-                element: (
-                  <ComingSoon
-                    title="Minijuego"
-                    icon="🕹️"
-                    sprint={2}
-                    text="Los juegos se abren a pantalla completa."
-                    features={[
-                      'Jugar a pantalla completa, sin distracciones',
-                      'Ver tu resultado y tu recompensa al terminar',
-                    ]}
-                  />
-                ),
+                element: <GameRoute />,
               },
             ],
           },

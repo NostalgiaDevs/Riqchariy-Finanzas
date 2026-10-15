@@ -87,8 +87,8 @@ export const GAMES: GameInfo[] = [
   {
     name: 'La Trampa',
     icon: '🕸️',
-    does: 'Tres deudas crecen cada turno y tu plata no alcanza para todas. Decides a cuál pagarle primero.',
-    learns: 'Interés, prioridad de deudas y cómo salir de ellas',
+    does: 'Analizas mensajes y ofertas para reconocer estafas, costos ocultos y promesas demasiado buenas.',
+    learns: 'Detectar estafas, comparar el costo total y decidir sin presión',
   },
   {
     name: 'Invierte o Pierde',
