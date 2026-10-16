@@ -12,6 +12,7 @@ import { WalletBar } from '@/design-system/money/WalletBar'
 import { RButton } from '@/design-system/RButton'
 import { SkipLink } from '@/design-system/SkipLink'
 import { BottomNav } from './BottomNav'
+import { QoriAvatar } from '@/modules/chatbot/QoriChat'
 import { SideNav } from './SideNav'
 import { paths } from '../paths'
 
@@ -51,7 +52,9 @@ export function GameLayout() {
             'min-w-0 scroll-mt-[var(--app-header-h,10rem)] pt-2 lg:pt-6',
             isDesktop
               ? 'pb-12'
-              : 'pb-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+1.5rem)]',
+              : location.pathname === paths.chatbot
+                ? 'pb-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+1.5rem)]'
+                : 'pb-[calc(var(--spacing-nav)+env(safe-area-inset-bottom)+5rem)]',
           )}
         >
           {/* Solo animación de entrada (CSS): sin salida no hay cuadro vacío ni parpadeo entre
@@ -63,6 +66,7 @@ export function GameLayout() {
       </div>
 
       {isDesktop ? null : <BottomNav />}
+      {location.pathname === paths.chatbot ? null : <QoriAvatar />}
     </div>
   )
 }

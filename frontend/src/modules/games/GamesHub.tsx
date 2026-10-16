@@ -24,21 +24,21 @@ const games = [
     icon: '🦊',
     name: 'Qori Quiz',
     description: 'Pon a prueba lo que sabes de tu dinero.',
-    ready: false,
+    ready: true,
   },
   {
     id: 'invierte_o_pierde',
     icon: '📈',
     name: 'Invierte o Pierde',
     description: 'Aprende a repartir riesgos.',
-    ready: false,
+    ready: true,
   },
   {
     id: 'mercado_rapido',
     icon: '🛒',
     name: 'Mercado Rápido',
     description: 'Compara precios bajo presión.',
-    ready: false,
+    ready: true,
   },
 ]
 export function GamesHub() {

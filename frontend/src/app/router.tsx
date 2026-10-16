@@ -5,6 +5,8 @@ import { RegisterPage } from '@/modules/auth/RegisterPage'
 import { ComponentCatalog } from '@/modules/dev/ComponentCatalog'
 import { HomePage } from '@/modules/home/HomePage'
 import { BankPage } from '@/modules/bank/BankPage'
+import { ShopPage } from '@/modules/shop/ShopPage'
+import { QoriPage } from '@/modules/chatbot/QoriChat'
 import { GamesHub } from '@/modules/games/GamesHub'
 import { GameRoute } from '@/modules/games/GameRoute'
 import { LandingPage } from '@/modules/landing/LandingPage'
@@ -43,22 +45,7 @@ export const routes: RouteObject[] = [
                 path: 'bank',
                 element: <BankPage />,
               },
-              {
-                path: 'shop',
-                element: (
-                  <ComingSoon
-                    title="Tienda"
-                    icon="🛍️"
-                    sprint={3}
-                    text="Compra al contado o en cuotas, y mira cuánto pagas de verdad."
-                    features={[
-                      'Comprar al contado o en cuotas',
-                      'Ver el total real de las cuotas antes de decidir',
-                      'Saber si te alcanza antes de comprar',
-                    ]}
-                  />
-                ),
-              },
+              { path: 'shop', element: <ShopPage /> },
               {
                 path: 'games',
                 element: <GamesHub />,
@@ -79,22 +66,7 @@ export const routes: RouteObject[] = [
                   />
                 ),
               },
-              {
-                path: 'chatbot',
-                element: (
-                  <ComingSoon
-                    title="Qori"
-                    icon="🦊"
-                    sprint={3}
-                    text="Pregúntale a Qori sobre tu plata."
-                    features={[
-                      'Preguntarle lo que no entiendas sobre tu plata',
-                      'Respuestas cortas, con los números de tu partida',
-                      'Solo habla de finanzas y del juego',
-                    ]}
-                  />
-                ),
-              },
+              { path: 'chatbot', element: <QoriPage /> },
               {
                 path: 'missions',
                 element: (
