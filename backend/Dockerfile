@@ -9,7 +9,7 @@ WORKDIR /app
 # El código se monta como volumen en desarrollo (ver docker-compose.yml).
 COPY pyproject.toml ./
 RUN mkdir app && touch app/__init__.py \
-    && pip install --no-cache-dir -e ".[dev]"
+    && pip install --no-cache-dir --timeout 120 --retries 10 -e ".[dev]"
 
 COPY . .
 

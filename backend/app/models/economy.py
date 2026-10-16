@@ -1,20 +1,21 @@
 import uuid
 from datetime import datetime
-from typing import Optional
+from typing import TYPE_CHECKING
 
-from sqlalchemy import ARRAY, Boolean, Float, ForeignKey, Integer, String, Text
+from sqlalchemy import ARRAY, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base
 
+if TYPE_CHECKING:
+    from app.models.player import Player
+
 
 class PlayerEconomy(Base):
     __tablename__ = "player_economy"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     player_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
         ForeignKey("players.id", ondelete="CASCADE"),
@@ -29,9 +30,7 @@ class PlayerEconomy(Base):
     savings_free: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
 
     # Trabajo
-    job_id: Mapped[str] = mapped_column(
-        String(50), nullable=False, default="ayudante_kiosco"
-    )
+    job_id: Mapped[str] = mapped_column(String(50), nullable=False, default="ayudante_kiosco")
     job_performance: Mapped[float] = mapped_column(Float, nullable=False, default=0.70)
 
     # Crédito
@@ -40,20 +39,16 @@ class PlayerEconomy(Base):
     # Estado
     stress: Mapped[float] = mapped_column(Float, nullable=False, default=0.15)
     score: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    league: Mapped[str] = mapped_column(
-        String(20), nullable=False, default="chaski"
-    )
+    league: Mapped[str] = mapped_column(String(20), nullable=False, default="chaski")
 
     # Tick y metas
     current_tick: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    goal_item: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    goal_item: Mapped[str | None] = mapped_column(String(50), nullable=True)
     goal_target: Mapped[int] = mapped_column(Integer, nullable=False, default=80)
     goal_saved: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
 
     # Arrays
-    flags: Mapped[list[str]] = mapped_column(
-        ARRAY(Text), nullable=False, server_default="{}"
-    )
+    flags: Mapped[list[str]] = mapped_column(ARRAY(Text), nullable=False, server_default="{}")
     pending_events: Mapped[list[str]] = mapped_column(
         ARRAY(Text), nullable=False, server_default="{}"
     )
@@ -62,9 +57,7 @@ class PlayerEconomy(Base):
     seed: Mapped[int] = mapped_column(Integer, nullable=False)
 
     # Timestamps
-    updated_at: Mapped[datetime] = mapped_column(
-        nullable=False, server_default="now()"
-    )
+    updated_at: Mapped[datetime] = mapped_column(nullable=False, server_default="now()")
 
     # Relaciones
     player: Mapped["Player"] = relationship(back_populates="economy")

@@ -97,29 +97,43 @@ Obtener estado completo del jugador.
 ```
 
 ### `POST /pacha/next-day`
-Avanzar un día (tick). El backend ejecuta el pipeline completo.
+Avanzar un día (tick). Actualmente ejecuta ingresos → gastos → estrés.
+Intereses, crédito, eventos, misiones y scoring quedan para sistemas posteriores.
 
 **Headers:** `Authorization: Bearer {token}`
 
-**Response 200:**
+**Body obligatorio:**
+```json
+{ "expected_tick": 14 }
+```
+
+Si el tick ya cambió, devuelve **409** sin modificar la economía. El cliente debe
+volver a consultar el estado. El bloqueo de filas evita avances duplicados entre
+peticiones concurrentes. Estado y evento se guardan en una sola transacción.
+
+**Response 200 (ejemplo):**
 ```json
 {
   "tick": 15,
   "summary": {
     "income": 0,
-    "expenses": 25,
-    "interest_earned": 0.56,
+    "expenses": 5.89,
+    "unpaid_expenses": 0,
+    "interest_earned": 0,
     "loan_payments": 0,
     "events_triggered": [],
-    "missions_progress": {
-      "MSN-001": { "current": 15, "target": 20, "complete": false }
-    },
-    "score_change": 3,
+    "missions_progress": {},
+    "score_change": 0,
     "stress_change": -0.01
   },
   "new_state": { "...PlayerEconomy completo..." }
 }
 ```
+
+`GET /pacha/state` y `new_state` incluyen además `version` y `unpaid_expenses`
+(total acumulado). En el resumen, `expenses` es lo efectivamente pagado y
+`unpaid_expenses` lo que no pudo pagarse ese día. Las cantidades se serializan
+como números JSON; dentro del dominio y PostgreSQL se usan Decimal/Numeric.
 
 ### `POST /pacha/decisions`
 Tomar una decisión en un evento.

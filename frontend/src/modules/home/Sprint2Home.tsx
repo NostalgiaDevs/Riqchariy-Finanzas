@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import { pachaApi } from '@/core/api/endpoints'
 import { queryKeys } from '@/core/api/queryKeys'
+import { useNextDay } from '@/core/hooks/useNextDay'
 import { paths } from '@/app/paths'
 import { RButton } from '@/design-system/RButton'
 import { RCard } from '@/design-system/RCard'
@@ -40,24 +41,23 @@ export function Sprint2Home({ state }: { state: PlayerState }) {
   const eventId = state.pending_events[0]
   const event = eventId ? eventCatalog[eventId] : undefined
 
-  const advance = useMutation({
-    mutationFn: pachaApi.nextDay,
-    onSuccess: (result) => {
-      client.setQueryData(queryKeys.playerState, result.new_state)
-      client.invalidateQueries({ queryKey: queryKeys.playerState })
-      const next = daysUsed(state.player_id) + 1
-      setUsed(next)
-      try {
-        sessionStorage.setItem(sessionKey(state.player_id), String(next))
-      } catch {
-        /* storage disabled */
-      }
-      setSummary(result.summary)
-      setOutcome(null)
-      setError(null)
-    },
-    onError: (reason: Error) => setError(reason.message),
-  })
+  const advance = useNextDay()
+  const advanceDay = () =>
+    advance.mutate(state.current_tick, {
+      onSuccess: (result) => {
+        const next = daysUsed(state.player_id) + 1
+        setUsed(next)
+        try {
+          sessionStorage.setItem(sessionKey(state.player_id), String(next))
+        } catch {
+          /* storage disabled */
+        }
+        setSummary(result.summary)
+        setOutcome(null)
+        setError(null)
+      },
+      onError: (reason: Error) => setError(reason.message),
+    })
   const inspect = useMutation({
     mutationFn: pachaApi.preview,
     onSuccess: (result) => {
@@ -192,7 +192,7 @@ export function Sprint2Home({ state }: { state: PlayerState }) {
           icon={<ArrowRight aria-hidden className="size-5" />}
           loading={advance.isPending}
           disabled={used >= MAX_DAYS || Boolean(eventId)}
-          onClick={() => advance.mutate()}
+          onClick={advanceDay}
         >
           Avanzar día
         </RButton>
@@ -204,6 +204,7 @@ export function Sprint2Home({ state }: { state: PlayerState }) {
       )}
       {summary && (
         <RCard padding="lg">
+          <p role="status">Día {advance.data?.tick}</p>
           <h2 className="text-xl">Así fue tu día</h2>
           <dl className="mt-3 grid grid-cols-2 gap-3 text-sm sm:grid-cols-3">
             {(

@@ -9,16 +9,25 @@ import '@fontsource/noto-sans-tifinagh/tifinagh-400.css'
 import './index.css'
 import { AppProviders } from './app/providers'
 import { createAppRouter } from './app/router'
-import { USE_MOCKS } from './core/utils/env'
-
-/** Con VITE_USE_MOCKS=true, MSW intercepta las llamadas a la API antes de montar la app. */
-async function enableMocking() {
-  if (!USE_MOCKS) return
-  const { worker } = await import('./mocks/browser')
-  await worker.start({ onUnhandledRequest: 'bypass', quiet: true })
-}
-
-enableMocking().then(() => {
+async function startApp() {
+  // Retire only the old MSW worker, including installations left by earlier builds.
+  if ('serviceWorker' in navigator) {
+    try {
+      const registrations = await navigator.serviceWorker.getRegistrations()
+      await Promise.all(
+        registrations
+          .filter((registration) =>
+            [registration.active, registration.waiting, registration.installing].some(
+              (worker) =>
+                worker && new URL(worker.scriptURL).pathname.endsWith('/mockServiceWorker.js'),
+            ),
+          )
+          .map((registration) => registration.unregister()),
+      )
+    } catch {
+      // An unavailable service-worker API must not prevent the app from rendering.
+    }
+  }
   createRoot(document.getElementById('root')!).render(
     <StrictMode>
       <AppProviders>
@@ -26,4 +35,6 @@ enableMocking().then(() => {
       </AppProviders>
     </StrictMode>,
   )
-})
+}
+
+void startApp()

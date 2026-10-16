@@ -1,45 +1,66 @@
-import uuid
-from sqlalchemy import Column, String, Integer, Float, ForeignKey, DateTime, Index
-from sqlalchemy.dialects.postgresql import UUID, JSONB
-from sqlalchemy.sql import func
-from app.infrastructure.database.base import Base
+"""Immutable economic aggregate. No database, clock or filesystem dependencies."""
 
-class PlayerEconomy(Base):
-    __tablename__ = "player_economy"
+from decimal import Decimal
+from typing import Annotated, Literal
+from uuid import UUID
 
-    player_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), primary_key=True)
-    version = Column(Integer, default=1)
-    wallet = Column(Float, default=0.0)
-    savings_goal = Column(Float, default=0.0)
-    savings_emergency = Column(Float, default=0.0)
-    savings_free = Column(Float, default=0.0)
-    job_id = Column(String)
-    job_performance = Column(Float, default=0.0)
-    wage_per_period = Column(Float, default=0.0)
-    loans = Column(JSONB, default=list)
-    credit_score = Column(Integer, default=500)
-    stress = Column(Float, default=0.0)
-    current_tick = Column(Integer, default=0)
-    score = Column(Integer, default=0)
-    league = Column(String)
-    goal_item = Column(String)
-    goal_target = Column(Float, default=0.0)
-    goal_saved = Column(Float, default=0.0)
-    inventory = Column(JSONB, default=dict)
-    flags = Column(JSONB, default=dict)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+from pydantic import BaseModel, ConfigDict, Field
 
-class EconomyEvent(Base):
-    __tablename__ = "economy_events"
+Money = Annotated[Decimal, Field(ge=0, allow_inf_nan=False)]
+League = Literal["chaski", "qollqa", "amauta", "apu"]
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    player_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
-    tick = Column(Integer, nullable=False)
-    event_type = Column(String, nullable=False)
-    event_data = Column(JSONB, default=dict)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
 
-    __table_args__ = (
-        Index("ix_economy_events_player_tick", "player_id", "tick"),
-    )
+class ValueObject(BaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+
+class Loan(ValueObject):
+    id: str
+    principal: Money
+    remaining: Money
+    rate: Money = Decimal("0")
+    term: int = Field(default=1, ge=1)
+    paid: Money = Decimal("0")
+    late: int = Field(default=0, ge=0)
+    type: Literal["bank", "store", "lender"] = "bank"
+    installment: Money = Decimal("0")
+    next_due_tick: int = Field(default=0, ge=0)
+    last_late_tick: int | None = Field(default=None, ge=0)
+
+
+class InventoryItem(ValueObject):
+    item: str
+    bought_at_tick: int = Field(ge=0)
+    category: str = "necesidad"
+
+
+class PlayerEconomy(ValueObject):
+    player_id: UUID
+    version: int = Field(default=1, ge=1)
+    wallet: Money = Decimal("0")
+    savings_goal: Money = Decimal("0")
+    savings_emergency: Money = Decimal("0")
+    savings_free: Money = Decimal("0")
+    job_id: str = "ayudante"
+    job_performance: float = Field(default=0.5, ge=0, le=1)
+    wage_per_period: Money = Decimal("60")
+    loans: tuple[Loan, ...] = ()
+    credit_score: int = Field(default=500, ge=300, le=850)
+    stress: float = Field(default=0, ge=0, le=1)
+    current_tick: int = Field(default=0, ge=0)
+    score: int = Field(default=550, ge=0, le=1000)
+    league: League = "chaski"
+    goal_item: str | None = None
+    goal_target: Money = Decimal("0")
+    goal_saved: Money = Decimal("0")
+    inventory: tuple[InventoryItem, ...] = ()
+    flags: tuple[str, ...] = ()
+    pending_events: tuple[str, ...] = ()
+    active_missions: tuple[str, ...] = ()
+    last_late_tick: int | None = Field(default=None, ge=0)
+    last_fun_tick: int | None = Field(default=None, ge=0)
+    unpaid_expenses: Money = Decimal("0")
+
+    def evolve(self, **changes: object) -> "PlayerEconomy":
+        """Validate replacements too (model_copy(update=...) skips validation)."""
+        return type(self).model_validate({**self.model_dump(), **changes})

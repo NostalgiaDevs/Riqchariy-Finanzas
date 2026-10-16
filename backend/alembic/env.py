@@ -1,17 +1,14 @@
+import os
 from logging.config import fileConfig
 
-import os
-from dotenv import load_dotenv
-
-
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-
 from alembic import context
+from dotenv import load_dotenv
+from sqlalchemy import engine_from_config, pool
+
 from app.infrastructure.database.base import Base
-from app.modules.auth.models import User
-from app.modules.classroom.models import Classroom
-from app.modules.pacha.domain.state import PlayerEconomy, EconomyEvent
+from app.modules.auth.models import User  # noqa: F401 -- register Alembic metadata
+from app.modules.classroom.models import Classroom  # noqa: F401 -- register Alembic metadata
+from app.modules.pacha.models import EconomyEvent, PlayerEconomy  # noqa: F401 -- register metadata
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -36,6 +33,7 @@ target_metadata = Base.metadata
 load_dotenv()
 
 config.set_main_option("sqlalchemy.url", os.environ.get("DATABASE_URL"))
+
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
@@ -75,9 +73,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

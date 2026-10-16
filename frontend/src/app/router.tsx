@@ -1,5 +1,4 @@
 import { createBrowserRouter, type RouteObject } from 'react-router'
-import { USE_MOCKS } from '@/core/utils/env'
 import { LoginPage } from '@/modules/auth/LoginPage'
 import { RegisterPage } from '@/modules/auth/RegisterPage'
 import { ComponentCatalog } from '@/modules/dev/ComponentCatalog'
@@ -113,9 +112,7 @@ export const routes: RouteObject[] = [
         ],
       },
       // Catálogo de componentes: solo en desarrollo o en el deploy de demo con mocks.
-      ...(import.meta.env.DEV || USE_MOCKS
-        ? [{ path: paths.components, element: <ComponentCatalog /> }]
-        : []),
+      ...(import.meta.env.DEV ? [{ path: paths.components, element: <ComponentCatalog /> }] : []),
       { path: '*', element: <NotFoundPage /> },
     ],
   },

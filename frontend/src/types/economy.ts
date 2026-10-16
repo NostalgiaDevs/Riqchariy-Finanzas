@@ -38,6 +38,8 @@ export interface Job {
 
 /** Respuesta de GET /pacha/state. */
 export interface PlayerState {
+  version?: number
+  unpaid_expenses?: number
   player_id: string
   wallet: number
   savings: Savings
@@ -67,6 +69,7 @@ export interface MissionProgress {
 }
 
 export interface DaySummary {
+  unpaid_expenses?: number
   income: number
   expenses: number
   interest_earned: number

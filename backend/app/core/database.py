@@ -1,12 +1,10 @@
-import os
 from collections.abc import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql://riqchariy:password@localhost:5432/riqchariy_db",
-)
+from app.core.config import get_settings
+
+DATABASE_URL = get_settings().database_url
 
 # SQLAlchemy async requiere asyncpg
 if DATABASE_URL.startswith("postgresql://"):

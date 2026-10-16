@@ -7,6 +7,7 @@ import yaml
 from pydantic import BaseModel, Field
 
 from app.core.config import get_settings
+from app.modules.pacha.domain.balance import Balance
 
 BACKEND_DIR = Path(__file__).resolve().parents[2]
 
@@ -40,7 +41,7 @@ def get_content_dir() -> Path:
     if configured:
         return Path(configured)
     for candidate in (BACKEND_DIR / "content", BACKEND_DIR.parent / "content"):
-        if candidate.is_dir():
+        if (candidate / "balance.yaml").is_file():
             return candidate
     raise FileNotFoundError("No se encontró la carpeta content/")
 
@@ -49,6 +50,11 @@ def get_content_dir() -> Path:
 def get_balance() -> dict[str, Any]:
     with open(get_content_dir() / "balance.yaml", encoding="utf-8") as f:
         return yaml.safe_load(f)
+
+
+@lru_cache
+def get_economy_balance() -> Balance:
+    return Balance.model_validate(get_balance())
 
 
 @lru_cache

@@ -1,10 +1,15 @@
-# Riqchariy · Frontend
+# Frontend Riqchariy
 
-SPA del piloto: React 19 + TypeScript + Vite + Tailwind v4. Plan de trabajo en [`../docs/PLAN-FRONTEND.md`](../docs/PLAN-FRONTEND.md).
+React + TypeScript + Vite. La aplicación consume el backend real en `VITE_API_URL`.
 
-## Arrancar en local
+## Desarrollo
 
-```bash
+Desde la raíz del repositorio:
+
+```sh
+docker compose up -d
+docker compose exec backend alembic upgrade head
+docker compose exec backend python -m scripts.seed_content
 cd frontend
 npm install
 npm run dev          # http://localhost:5173 — con mocks por defecto
@@ -20,10 +25,8 @@ Catálogo de componentes (VitalBar, IntiFly, botones, modal…): **http://localh
 | ----------------------------------- | ---------------------------------------------------------------------------- |
 | `/`                                 | Portada pública (qué es Riqchariy, ligas, colegios)                          |
 | `/login`, `/register`               | Entrar y crear cuenta (con sesión, redirigen a `/app`)                       |
-| `/app`                              | Home "Mi Vida" (avanzar día, resumen diario, cartas de eventos con preview)  |
-| `/app/bank`                         | Banco: 3 frascos con fricción de retiro, deudas activas y CreditScoreGauge   |
-| `/app/games`                        | Hub de minijuegos: El Kiosco y La Trampa activos en pantalla completa       |
-| `/app/shop`, `/app/ranking`, etc.   | Pantallas en construcción (muestran "Llega en el Sprint N")                  |
+| `/app`                              | Home "Mi Vida" (exige sesión; todo el juego vive bajo `/app`)                |
+| `/app/bank`, `/app/games`, `/app/…` | Pantallas del juego (las de sprints futuros muestran "Llega en el Sprint N") |
 | `/dev/componentes`                  | Catálogo del design system (solo en dev o con mocks)                         |
 
 Las rutas se definen en `src/app/paths.ts`: usa `paths.bank` en vez de escribir `'/app/bank'`.

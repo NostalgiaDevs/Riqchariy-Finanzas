@@ -52,10 +52,14 @@ credit_score:
   default: -60
 
 stress:
-  min: 0.0
-  max: 1.0
-  daily_decay: 0.01
-  broke_penalty: 0.05
+  weights:
+    debt_ratio: 0.35
+    no_emergency: 0.25
+    recent_late: 0.25
+    no_recent_fun: 0.15
+  emergency_target: 150
+  late_window: 14
+  fun_window: 28
 
 jobs:
   - id: ayudante
@@ -73,14 +77,14 @@ jobs:
 
 fixed_expenses:
   - id: comida
-    amount: 15
-    every_ticks: 7
+    amount: 100
+    every_ticks: 28
   - id: celular
-    amount: 10
-    every_ticks: 7
+    amount: 25
+    every_ticks: 28
   - id: pasajes
-    amount: 8
-    every_ticks: 7
+    amount: 40
+    every_ticks: 28
 
 savings:
   jars: [meta, emergencias, libre]

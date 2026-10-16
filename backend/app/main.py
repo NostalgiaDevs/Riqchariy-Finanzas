@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.core.config import get_settings
 from app.api.v1.auth import router as auth_router_v1
 from app.api.v1.health import router as health_router
+from app.core.config import get_settings
 from app.modules.auth.router import router as auth_router
 from app.modules.chatbot.router import router as chatbot_router
 from app.modules.game.router import router as game_router
@@ -28,7 +28,7 @@ app.add_middleware(
 
 app.include_router(health_router, prefix="/api/v1")
 app.include_router(auth_router_v1, prefix="/api/v1")
-app.include_router(auth_router, prefix="/api/v1/auth", tags=["auth"])
+app.include_router(auth_router, prefix="/api/v1/auth/email", tags=["auth-email"])
 app.include_router(pacha_router, prefix="/api/v1/pacha", tags=["pacha"])
 app.include_router(game_router, prefix="/api/v1/games", tags=["game"])
 app.include_router(chatbot_router, prefix="/api/v1/chatbot", tags=["chatbot"])

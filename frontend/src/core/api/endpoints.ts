@@ -31,7 +31,11 @@ export const authApi = {
 
 export const pachaApi = {
   getState: (signal?: AbortSignal) => apiRequest<PlayerState>('/pacha/state', { signal }),
-  nextDay: () => apiRequest<NextDayResponse>('/pacha/next-day', { method: 'POST' }),
+  nextDay: (expectedTick: number) =>
+    apiRequest<NextDayResponse>('/pacha/next-day', {
+      method: 'POST',
+      body: { expected_tick: expectedTick },
+    }),
   decide: (body: DecisionRequest) =>
     apiRequest<DecisionResponse>('/pacha/decisions', { method: 'POST', body }),
   preview: (body: DecisionRequest) =>

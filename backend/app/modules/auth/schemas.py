@@ -1,27 +1,30 @@
-from pydantic import BaseModel, EmailStr
-from uuid import UUID
 from datetime import datetime
-from typing import Optional
+from uuid import UUID
+
+from pydantic import BaseModel, ConfigDict, EmailStr
+
 
 class UserCreate(BaseModel):
     email: EmailStr  # Requiere que instales pydantic[email] si no lo tienes
     password: str
     name: str
-    classroom_code: Optional[str] = None
-    
+    classroom_code: str | None = None
+
+
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
+
 class UserOut(BaseModel):
     id: UUID
-    email: EmailStr
+    email: EmailStr | None
     name: str
-    classroom_code: Optional[str]
+    classroom_code: str | None
     created_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
+
 
 class AuthResponse(BaseModel):
     token: str
