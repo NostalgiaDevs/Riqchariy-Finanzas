@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { examplePlayerState, freshPlayerState } from '@/mocks/fixtures'
+import { examplePlayerState, freshPlayerState } from '@/test/mocks/fixtures'
 import { LEAGUE_ORDER, LEAGUES, selectVitals, stressLevel } from './vitals'
 
 describe('selectVitals', () => {

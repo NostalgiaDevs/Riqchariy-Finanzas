@@ -36,10 +36,10 @@ Cloudflare (CDN/WAF/SSL)
    ├── auth · users · learning
    ├── pacha/      ⭐ el motor económico (funciones puras + ticks)
    ├── game        (resultados de Phaser, anti-trampa)
-   ├── chatbot     (LLM + RAG sobre Qdrant + estado del alumno)
+   ├── chatbot     (LLM + RAG sobre pgvector + estado del alumno)
    └── analytics   (métricas conductuales del event log)
         │
-  PostgreSQL · Redis · Qdrant
+  PostgreSQL (+ pgvector) · Redis
 ```
 
 **Regla de oro arquitectónica:** *modular monolith ahora, microservicios cuando los datos lo exijan, nunca antes.* ML real solo con 10,000+ decisiones registradas; antes de eso, IA basada en reglas.
@@ -68,13 +68,13 @@ Detalle completo y comentado en **[`docs/ESTRUCTURA.md`](docs/ESTRUCTURA.md)**.
 
 ## 🚀 Puesta en marcha (local)
 
-**Requisitos:** Docker + Docker Compose, Node 20+, Python 3.12+, Make.
+**Requisitos:** Docker + Docker Compose, Node 20+, Python 3.11+, Make.
 
 ```bash
 git clone git@github.com:<org>/riqchariy.git
 cd riqchariy
 cp .env.example .env          # completar secretos locales
-make up                       # levanta postgres, redis, qdrant, backend, frontend
+make up                       # levanta postgres (pgvector), redis y backend
 make migrate                  # aplica migraciones Alembic
 make seed                     # colegio demo + aula + 10 alumnos + contenido base
 ```
@@ -85,20 +85,19 @@ make seed                     # colegio demo + aula + 10 alumnos + contenido bas
 | API (docs) | http://localhost:8000/docs |
 | Postgres | localhost:5432 |
 | Redis | localhost:6379 |
-| Qdrant | http://localhost:6333 |
 
 > **Gate de Fase 0:** `make up` debe funcionar en la máquina de cada fundador sin ajustes manuales. Si no corre, es un bug de prioridad alta — no un "en mi PC sí funciona".
 
 ### Comandos frecuentes
 
 ```bash
-make test          # pytest + vitest
-make lint          # ruff + eslint + prettier
-make fmt           # autoformato
-make tick          # avanza 1 tick virtual en el aula demo
-make sim           # Simulation Lab: 10,000 agentes × 1 temporada
+make install       # dependencias del backend (pip install -e ".[dev]") y frontend
+make test          # pytest (backend)
+make lint          # ruff + eslint
+make format        # autoformato (ruff format + prettier)
+make pacha-sim     # simulación rápida: 100 agentes × 28 ticks
 make logs          # logs de todos los contenedores
-make down          # apaga y limpia
+make down          # apaga los servicios
 ```
 
 ---
@@ -181,7 +180,7 @@ El motor económico es el corazón: si calcula mal, el producto miente a un meno
 
 Este proyecto maneja datos de estudiantes menores de edad bajo la **Ley 29733 (Protección de Datos Personales, Perú)**.
 
-- Los alumnos **no se autoregistran**: el colegio crea las cuentas (carga por CSV del docente).
+- Los alumnos **no se autoregistran**: el colegio crea las cuentas (carga por CSV del docente). *Excepción: el piloto v0.1 usa registro por alias + código de aula, sin datos personales reales (ver `docs/ALCANCE-MVP.md`).*
 - Consentimiento de padres gestionado por el colegio; banco de datos registrado ante la ANPD.
 - Datos personales cifrados en reposo; PII fuera de logs y de la telemetría de producto.
 - **Jamás se venden datos.** Los reportes agregados son anónimos fuera del aula.

@@ -1,0 +1,2 @@
+# Keep frontend text compatible with Prettier on Windows and Unix.
+frontend/** text=auto eol=lf

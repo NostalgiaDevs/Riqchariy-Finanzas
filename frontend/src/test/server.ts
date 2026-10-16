@@ -1,5 +1,5 @@
 import { setupServer } from 'msw/node'
-import { handlers } from '@/mocks/handlers'
+import { handlers } from '@/test/mocks/handlers'
 
-/** Servidor MSW para tests: los mismos handlers que usa el navegador en modo mock. */
+/** HTTP doubles exclusively for automated tests, never imported by the app. */
 export const server = setupServer(...handlers)

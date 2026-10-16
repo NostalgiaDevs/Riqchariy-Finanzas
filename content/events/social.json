@@ -1,0 +1,62 @@
+[
+  {
+    "id": "SOC-001",
+    "category": "social",
+    "title": "Cumpleaños de tu mejor amigo",
+    "description": "Tu mejor amigo cumple años y todos le harán regalos.",
+    "choices": [
+      {
+        "id": "regalo_caro",
+        "label": "Regalo caro (ⵊ50)",
+        "outcome": "A tu amigo le encanta, pero te excediste.",
+        "effects": { "wallet_change": -50, "stress_change": 0.03, "teaches": ["presion_social"] }
+      },
+      {
+        "id": "regalo_simple",
+        "label": "Regalo sencillo (ⵊ15)",
+        "outcome": "Lo que cuenta es el detalle. Tu amigo lo aprecia.",
+        "effects": { "wallet_change": -15, "stress_change": -0.02, "score_change": 5, "teaches": ["presupuesto"] }
+      }
+    ]
+  },
+  {
+    "id": "SOC-002",
+    "category": "social",
+    "title": "Un amigo te pide prestado",
+    "description": "Un compañero te pide ⵊ30 y promete devolverlos la próxima semana.",
+    "choices": [
+      {
+        "id": "prestar",
+        "label": "Prestarle",
+        "outcome": "Te devuelve la mitad y dice que luego te da el resto.",
+        "effects": { "wallet_change": -15, "stress_change": 0.04, "teaches": ["prestar_con_cuidado"] }
+      },
+      {
+        "id": "no_prestar",
+        "label": "Decir que no amablemente",
+        "outcome": "Tu amigo lo entiende. Proteger tu dinero no te hace mal amigo.",
+        "effects": { "score_change": 3, "teaches": ["prestar_con_cuidado"] }
+      }
+    ]
+  },
+  {
+    "id": "SOC-003",
+    "category": "social",
+    "title": "Paseo de promoción",
+    "description": "Tu salón organiza un paseo a la playa. La cuota es ⵊ60.",
+    "choices": [
+      {
+        "id": "ir",
+        "label": "Pagar e ir",
+        "outcome": "Pasas un día inolvidable con tu promoción.",
+        "effects": { "wallet_change": -60, "stress_change": -0.08, "teaches": ["gasto_planificado"] }
+      },
+      {
+        "id": "no_ir",
+        "label": "No ir y ahorrar",
+        "outcome": "Ahorras, pero te pierdes el paseo.",
+        "effects": { "stress_change": 0.04, "score_change": 3, "teaches": ["costo_de_oportunidad"] }
+      }
+    ]
+  }
+]

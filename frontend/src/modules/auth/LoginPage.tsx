@@ -5,7 +5,6 @@ import { authApi } from '@/core/api/endpoints'
 import { paths } from '@/app/paths'
 import { useDocumentTitle } from '@/core/hooks/useDocumentTitle'
 import { useAuthStore } from '@/core/store/authStore'
-import { USE_MOCKS } from '@/core/utils/env'
 import { RButton } from '@/design-system/RButton'
 import { RInput } from '@/design-system/RInput'
 import { AuthLayout } from './AuthLayout'
@@ -98,12 +97,6 @@ export function LoginPage() {
         <RButton type="submit" size="lg" fullWidth loading={login.isPending}>
           Entrar
         </RButton>
-
-        {USE_MOCKS ? (
-          <p className="rounded-control bg-dorado-50 px-3 py-2 text-center text-sm text-dorado-700">
-            Modo demo: entra con <strong>alumno1</strong> y <strong>demo1234</strong>
-          </p>
-        ) : null}
       </form>
     </AuthLayout>
   )

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "OPP-001",
+    "category": "oportunidad",
+    "title": "Trabajo extra el fin de semana",
+    "description": "Un vecino necesita ayuda para una mudanza y paga ⵊ40.",
+    "choices": [
+      {
+        "id": "aceptar",
+        "label": "Aceptar el trabajo",
+        "outcome": "Terminas cansado, pero con ⵊ40 más.",
+        "effects": { "wallet_change": 40, "stress_change": 0.03, "score_change": 5, "teaches": ["ingreso_extra"] }
+      },
+      {
+        "id": "descansar",
+        "label": "Descansar",
+        "outcome": "Recargas energía para la semana.",
+        "effects": { "stress_change": -0.05, "teaches": ["equilibrio"] }
+      }
+    ]
+  },
+  {
+    "id": "OPP-002",
+    "category": "oportunidad",
+    "title": "Curso gratuito",
+    "description": "La municipalidad ofrece un curso de atención al cliente.",
+    "choices": [
+      {
+        "id": "inscribirse",
+        "label": "Inscribirte",
+        "outcome": "Aprendes cosas útiles y tu jefe lo nota.",
+        "effects": { "score_change": 10, "flags_added": ["curso_atencion"], "teaches": ["invertir_en_ti"] }
+      },
+      {
+        "id": "ignorar",
+        "label": "No ir",
+        "outcome": "Tienes más tiempo libre esta semana.",
+        "effects": { "teaches": ["costo_de_oportunidad"] }
+      }
+    ]
+  },
+  {
+    "id": "OPP-003",
+    "category": "oportunidad",
+    "title": "Vender cosas que no usas",
+    "description": "Tienes ropa y juegos que ya no usas en tu cuarto.",
+    "choices": [
+      {
+        "id": "vender",
+        "label": "Venderlos en la feria (ⵊ30)",
+        "outcome": "Ganas dinero y liberas espacio.",
+        "effects": { "wallet_change": 30, "score_change": 5, "teaches": ["ingreso_extra"] }
+      },
+      {
+        "id": "guardar",
+        "label": "Guardarlos",
+        "outcome": "Siguen ocupando espacio.",
+        "effects": {}
+      }
+    ]
+  }
+]

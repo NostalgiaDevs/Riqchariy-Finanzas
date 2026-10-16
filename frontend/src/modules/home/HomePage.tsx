@@ -17,6 +17,7 @@ import { buttonClasses } from '@/design-system/buttonStyles'
 import { ScoreCard } from '@/modules/shared/ScoreCard'
 import type { JarId, LoanProduct, PlayerState } from '@/types/economy'
 import { Sprint2Home } from './Sprint2Home'
+import { Store } from 'lucide-react';
 
 /** Metas del onboarding (PLAN-FRONTEND S4.FE.01). Cualquier otra usa el ícono genérico. */
 const GOAL_ICONS: Record<string, string> = {
@@ -50,22 +51,11 @@ const cardLinkClass =
  */
 export function HomePage() {
   const alias = useAuthStore((state) => state.user?.alias)
-  const { data: state, isPending, isError, refetch } = usePlayerState()
+  const { data: state, isPending } = usePlayerState()
   const isDesktop = useIsDesktop()
   useDocumentTitle('Inicio')
 
-  if (isError && !state) {
-    return (
-      <RCard padding="lg">
-        <h1 className="text-2xl">No pudimos cargar tu mundo</h1>
-        <p className="mt-2 text-tinta-suave">Revisa tu conexión e inténtalo otra vez.</p>
-        <button type="button" onClick={() => refetch()} className={cn(buttonClasses(), 'mt-4')}>
-          Reintentar
-        </button>
-      </RCard>
-    )
-  }
-
+  // Celular: una columna. Tablet en adelante: el próximo día y la meta lado a lado.
   return (
     <div className="flex flex-col gap-5 md:gap-6">
       <section>
@@ -83,6 +73,7 @@ export function HomePage() {
       </section>
 
       {state && <Sprint2Home state={state} />}
+      {state && <NextDayCard state={state} />}
       <section aria-labelledby="progress-title">
         <h2 id="progress-title" className="mb-3 text-xl">
           Tu progreso
@@ -113,6 +104,69 @@ export function HomePage() {
       {/* En laptop/PC, Tienda y Misiones ya están en el menú lateral. */}
       {isDesktop ? null : <MoreLinks missions={state?.active_missions.length} />}
     </div>
+  )
+}
+
+/**
+ * El lugar de "Avanzar día". Es la única tarjeta nocturna del Home: lo que pasa mañana
+ * es lo más importante de la pantalla, y usa el mismo cielo que la cabecera.
+ */
+function NextDayCard({ state }: { state: PlayerState }) {
+  const { job } = state
+  return (
+    <section
+      aria-labelledby="next-day-title"
+      className="relative flex flex-col overflow-hidden rounded-sheet bg-noche-alta text-white shadow-raised"
+    >
+      <DawnGlow className="absolute -right-16 -top-20 size-56" />
+
+      <div className="relative flex-1 p-5 lg:p-6">
+        <h2 id="next-day-title" className="text-xl">
+          Mañana es el día {state.current_tick + 1}
+        </h2>
+        <p className="mt-2 text-sm leading-relaxed text-white/75">
+          Muy pronto vas a avanzar tus días desde aquí: cobrar tu sueldo, pagar tus gastos y decidir
+          qué hacer cuando algo pase.
+        </p>
+      </div>
+
+      <div className="relative flex items-center gap-3 border-t border-white/10 bg-white/4 px-5 py-3.5 lg:px-6">
+        <span className="grid size-10 shrink-0 place-items-center rounded-full bg-dorado/15 text-dorado">
+          <Store aria-hidden className="size-5" />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="font-semibold leading-snug">{job.name}</p>
+          <p className="whitespace-nowrap text-sm text-white/70">
+            Desempeño {formatPercent(job.performance)}
+          </p>
+        </div>
+        <p className="shrink-0 text-right text-sm leading-tight text-white/70">
+          <IntiAmount
+            value={job.wage_per_week}
+            tone="neutral"
+            animated={false}
+            className="block font-display text-lg text-inti-claro"
+          />
+          por semana
+        </p>
+      </div>
+    </section>
+  )
+}
+
+/**
+ * Luz de alba en la esquina: el sol ya está en la cabecera, aquí solo se nota que viene.
+ * (Dos soles en la misma pantalla competían entre sí.)
+ */
+function DawnGlow({ className }: { className?: string }) {
+  return (
+    <div
+      aria-hidden
+      className={cn(
+        'pointer-events-none rounded-full bg-[radial-gradient(circle,rgb(246_180_74/0.4)_0%,rgb(214_46_108/0.18)_45%,transparent_70%)]',
+        className,
+      )}
+    />
   )
 }
 

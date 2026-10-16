@@ -1,0 +1,62 @@
+[
+  {
+    "id": "MAC-001",
+    "category": "macro",
+    "title": "Suben los precios",
+    "description": "La inflación hace que la comida cueste más este mes.",
+    "choices": [
+      {
+        "id": "ajustar",
+        "label": "Ajustar tu presupuesto",
+        "outcome": "Recortas gastos no esenciales y te mantienes a flote.",
+        "effects": { "wallet_change": -10, "score_change": 5, "teaches": ["inflacion", "presupuesto"] }
+      },
+      {
+        "id": "seguir_igual",
+        "label": "Seguir gastando igual",
+        "outcome": "A fin de mes te falta dinero.",
+        "effects": { "wallet_change": -25, "stress_change": 0.08, "score_change": -5, "teaches": ["inflacion"] }
+      }
+    ]
+  },
+  {
+    "id": "MAC-002",
+    "category": "macro",
+    "title": "Paro de transportistas",
+    "description": "Hay paro y los pasajes suben mientras dura.",
+    "choices": [
+      {
+        "id": "caminar",
+        "label": "Caminar al trabajo",
+        "outcome": "Llegas cansado, pero sin gastar de más.",
+        "effects": { "stress_change": 0.04, "teaches": ["imprevistos"] }
+      },
+      {
+        "id": "taxi",
+        "label": "Tomar taxi",
+        "outcome": "Llegas a tiempo, pero pagas el triple.",
+        "effects": { "wallet_change": -20, "teaches": ["imprevistos"] }
+      }
+    ]
+  },
+  {
+    "id": "MAC-003",
+    "category": "macro",
+    "title": "Sube la tasa de interés",
+    "description": "Los bancos suben sus tasas: los préstamos cuestan más, pero el ahorro rinde más.",
+    "choices": [
+      {
+        "id": "ahorrar_mas",
+        "label": "Aprovechar para ahorrar más",
+        "outcome": "Tus ahorros rinden mejor este mes.",
+        "effects": { "score_change": 8, "teaches": ["tasa_de_interes"] }
+      },
+      {
+        "id": "nada",
+        "label": "No cambiar nada",
+        "outcome": "Todo sigue igual para ti.",
+        "effects": { "teaches": ["tasa_de_interes"] }
+      }
+    ]
+  }
+]
