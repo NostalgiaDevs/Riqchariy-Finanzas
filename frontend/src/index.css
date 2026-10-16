@@ -74,6 +74,15 @@ html:has(dialog[open]) {
   overflow: hidden;
 }
 
+/* Las preguntas rápidas dejan ver la siguiente opción sin mostrar una barra gruesa en Windows. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   ::before,

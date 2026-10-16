@@ -96,9 +96,9 @@ export function Sprint2Home({ state }: { state: PlayerState }) {
       to: paths.games,
       icon: BriefcaseBusiness,
     },
-    { label: 'Tienda', value: 'Próximamente', to: paths.shop, icon: ShoppingBag },
+    { label: 'Tienda', value: 'Compra con criterio', to: paths.shop, icon: ShoppingBag },
     { label: 'Ranking', value: 'Próximamente', to: paths.ranking, icon: Trophy },
-    { label: 'Qori', value: 'Próximamente', to: paths.chatbot, icon: MessageCircle },
+    { label: 'Qori', value: 'Pregúntale a Qori', to: paths.chatbot, icon: MessageCircle },
   ]
 
   return (

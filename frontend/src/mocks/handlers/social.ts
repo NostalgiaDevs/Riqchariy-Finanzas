@@ -50,8 +50,20 @@ export const socialHandlers = [
     withAuth(async ({ request, state }) => {
       const { message } = (await request.json()) as ChatRequest
       if (!message?.trim()) return apiError(422, 'Escribe tu pregunta.')
+      const normalized = message.toLocaleLowerCase('es-PE')
+      const answer = /inter[eé]s|cuotas/.test(normalized)
+        ? 'Las cuotas pueden costar más que pagar al contado. Compara siempre el total antes de comprar.'
+        : /ahorr|deuda/.test(normalized)
+          ? `Tienes ⵊ${state.wallet} disponibles. Revisa tus cuotas próximas y conserva un fondo de emergencia antes de gastar.`
+          : /estr[eé]s/.test(normalized)
+            ? `Tu estrés está en ${Math.round(state.stress * 100)}%. Mira tus gastos fijos y avanza un día a la vez.`
+            : /score|puntaje/.test(normalized)
+              ? `Tu score es ${state.score}. Comparar precios, ahorrar y pagar a tiempo ayuda a mejorarlo en el juego.`
+              : /kiosco|trampa|juego|inver|mercado|quiz/.test(normalized)
+                ? 'En los juegos compara costos, investiga antes de decidir y evita promesas de dinero fácil.'
+                : 'Puedo ayudarte con ahorro, deudas, cuotas y decisiones dentro de Pacha. ¿Qué te gustaría entender?'
       return HttpResponse.json<ChatResponse>({
-        response: `🦊 (modo demo) Tienes ⵊ${state.wallet} en tu billetera. Cuando Qori esté conectado, te responderé sobre: "${message.trim()}".`,
+        response: answer,
         concepts_referenced: [],
         sources: [],
       })
