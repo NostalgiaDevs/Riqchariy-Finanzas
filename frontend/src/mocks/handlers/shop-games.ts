@@ -25,6 +25,9 @@ export const shopHandlers = [
       const body = (await request.json()) as ShopBuyRequest
       const item = SHOP_ITEMS.find((candidate) => candidate.id === body.item_id)
       if (!item) return apiError(404, 'Ese producto no está en la tienda esta semana.')
+      if (current.inventory.includes(item.id)) return apiError(409, 'Ya tienes este producto.')
+      if (body.payment_method !== 'contado' && body.payment_method !== 'cuotas')
+        return apiError(422, 'Elige cómo pagar.')
 
       const state = structuredClone(current)
       let cost = item.price
