@@ -64,6 +64,31 @@ export const gamesHandlers = [
     `${API_BASE}/games/results`,
     withAuth(async ({ request, user, state: current }) => {
       const body = (await request.json()) as GameResultRequest
+      if (!body?.game_id || !body.data) return apiError(422, 'Falta el resultado del juego.')
+      if (
+        body.game_id === 'invierte_o_pierde' &&
+        (!Number.isFinite(body.data.final_value) ||
+          body.data.final_value < 0 ||
+          body.data.diversification_score < 0 ||
+          body.data.diversification_score > 100)
+      )
+        return apiError(422, 'Resultado de inversión inválido.')
+      if (
+        body.game_id === 'mercado_rapido' &&
+        (!Number.isFinite(body.data.profit) ||
+          body.data.accuracy_pct < 0 ||
+          body.data.accuracy_pct > 100 ||
+          body.data.investigated_before_buying_pct < 0 ||
+          body.data.investigated_before_buying_pct > 100)
+      )
+        return apiError(422, 'Resultado de mercado inválido.')
+      if (
+        body.game_id === 'qori_quiz' &&
+        (body.data.correct_count < 0 ||
+          body.data.correct_count > 10 ||
+          body.data.score !== body.data.correct_count * 10)
+      )
+        return apiError(422, 'Resultado del quiz inválido.')
       const key = `${user.player_id}:${body.game_id}`
       const last = mockDb.lastGameAt.get(key) ?? 0
       if (import.meta.env.MODE !== 'test' && Date.now() - last < GAME_COOLDOWN_MS) {
@@ -72,7 +97,14 @@ export const gamesHandlers = [
       mockDb.lastGameAt.set(key, Date.now())
 
       // Recompensa genérica: el backend real traduce cada juego a efectos distintos.
-      const rawScore = 'score' in body.data ? body.data.score : 500
+      const rawScore =
+        'score' in body.data
+          ? body.data.score
+          : body.game_id === 'invierte_o_pierde'
+            ? Math.min(1000, Math.max(0, Math.round(body.data.final_value * 5)))
+            : body.data.profit > 0
+              ? Math.min(1000, Math.max(0, Math.round(body.data.accuracy_pct * 10)))
+              : 0
       const performance = round2(Math.min(1, Math.max(0, rawScore / 1000)))
       const reward = rawScore > 0 ? Math.round(10 + performance * 25) : 0
 
@@ -89,7 +121,9 @@ export const gamesHandlers = [
           rawScore <= 0
             ? body.game_id === 'kiosco'
               ? 'No hubo ventas. Compra mercadería antes de abrir y vuelve a intentarlo.'
-              : 'Aún no acertaste. Revisa las pistas y vuelve a intentarlo.'
+              : body.game_id === 'mercado_rapido'
+                ? 'El margen no fue positivo. Investiga precios y compra solo cuando encuentres una buena oferta.'
+                : 'Aún no acertaste. Revisa las pistas y vuelve a intentarlo.'
             : `¡Buena partida! Ganaste ⵊ${reward}.`,
       })
     }),
